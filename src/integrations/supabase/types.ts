@@ -17,8 +17,10 @@ export type Database = {
       cities: {
         Row: {
           body: string | null
+          compliance_info: string | null
           created_at: string
           display_order: number
+          faqs: Json
           hero_description: string | null
           hero_title: string | null
           id: string
@@ -31,8 +33,10 @@ export type Database = {
         }
         Insert: {
           body?: string | null
+          compliance_info?: string | null
           created_at?: string
           display_order?: number
+          faqs?: Json
           hero_description?: string | null
           hero_title?: string | null
           id?: string
@@ -45,8 +49,10 @@ export type Database = {
         }
         Update: {
           body?: string | null
+          compliance_info?: string | null
           created_at?: string
           display_order?: number
+          faqs?: Json
           hero_description?: string | null
           hero_title?: string | null
           id?: string
@@ -139,6 +145,60 @@ export type Database = {
           name?: string
           phone?: string
           service?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          benefits: Json
+          body: string | null
+          created_at: string
+          display_order: number
+          faqs: Json
+          hero_description: string | null
+          icon_name: string | null
+          id: string
+          is_published: boolean
+          process_steps: Json
+          short_description: string | null
+          slug: string
+          title_ar: string
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          benefits?: Json
+          body?: string | null
+          created_at?: string
+          display_order?: number
+          faqs?: Json
+          hero_description?: string | null
+          icon_name?: string | null
+          id?: string
+          is_published?: boolean
+          process_steps?: Json
+          short_description?: string | null
+          slug: string
+          title_ar: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          benefits?: Json
+          body?: string | null
+          created_at?: string
+          display_order?: number
+          faqs?: Json
+          hero_description?: string | null
+          icon_name?: string | null
+          id?: string
+          is_published?: boolean
+          process_steps?: Json
+          short_description?: string | null
+          slug?: string
+          title_ar?: string
+          title_en?: string | null
           updated_at?: string
         }
         Relationships: []
