@@ -15,8 +15,22 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { Inbox, FolderKanban, MapPin, LogOut, Check, Trash2, Plus, ShieldCheck, MailOpen } from "lucide-react";
+import {
+  Inbox,
+  FolderKanban,
+  MapPin,
+  LogOut,
+  Check,
+  Trash2,
+  Plus,
+  ShieldCheck,
+  MailOpen,
+  Briefcase,
+  Newspaper,
+  Users as UsersIcon,
+} from "lucide-react";
 import { toast } from "sonner";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -120,17 +134,29 @@ function AdminPage() {
             <TabsTrigger value="quotes" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <Inbox className="h-4 w-4" /> طلبات الدراسات
             </TabsTrigger>
+            <TabsTrigger value="services" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <Briefcase className="h-4 w-4" /> الخدمات
+            </TabsTrigger>
             <TabsTrigger value="projects" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <FolderKanban className="h-4 w-4" /> المشاريع
             </TabsTrigger>
             <TabsTrigger value="cities" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <MapPin className="h-4 w-4" /> صفحات المدن
             </TabsTrigger>
+            <TabsTrigger value="blog" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <Newspaper className="h-4 w-4" /> المدونة
+            </TabsTrigger>
+            <TabsTrigger value="users" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <UsersIcon className="h-4 w-4" /> المستخدمين
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="quotes" className="mt-6"><QuotesPanel /></TabsContent>
+          <TabsContent value="services" className="mt-6"><ServicesPanel /></TabsContent>
           <TabsContent value="projects" className="mt-6"><ProjectsPanel /></TabsContent>
           <TabsContent value="cities" className="mt-6"><CitiesPanel /></TabsContent>
+          <TabsContent value="blog" className="mt-6"><BlogPanel /></TabsContent>
+          <TabsContent value="users" className="mt-6"><UsersPanel /></TabsContent>
         </Tabs>
       </main>
     </div>
