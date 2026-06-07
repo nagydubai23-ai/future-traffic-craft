@@ -1,5 +1,5 @@
 import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-router";
-import { getService } from "@/lib/content.functions";
+import { getService, type FAQ, type ProjectRow } from "@/lib/content.functions";
 import { IconByName } from "@/components/shared/IconByName";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { useState } from "react";
@@ -100,7 +100,7 @@ function ServicePage() {
             <h2 id="benefits-h" className="text-3xl md:text-4xl font-bold text-primary">لماذا تختار {service.title_ar}؟</h2>
           </header>
           <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {service.benefits.map((b, i) => (
+            {service.benefits.map((b: string, i: number) => (
               <li key={i} className="group bg-card border border-border rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <CheckCircle2 className="w-8 h-8 text-[var(--color-accent)] mb-4" />
                 <p className="text-base leading-relaxed text-foreground/90">{b}</p>
@@ -119,7 +119,7 @@ function ServicePage() {
             <p className="mt-4 text-muted-foreground leading-relaxed">منهجية هندسية واضحة من جمع البيانات وحتى تسليم التقرير النهائي.</p>
           </header>
           <ol className="relative grid gap-6">
-            {service.process_steps.map((step, i) => (
+            {service.process_steps.map((step: string, i: number) => (
               <li key={i} className="relative bg-card border border-border rounded-2xl p-6 md:p-8 flex gap-6 items-start">
                 <span className="shrink-0 w-14 h-14 rounded-2xl bg-primary text-primary-foreground grid place-items-center font-bold text-lg">{String(i + 1).padStart(2, "0")}</span>
                 <p className="text-lg leading-relaxed text-foreground/90 pt-3">{step}</p>
@@ -140,7 +140,7 @@ function ServicePage() {
               </div>
             </header>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.map((p) => (
+              {projects.map((p: ProjectRow) => (
                 <article key={p.id} className="bg-card border border-border rounded-2xl overflow-hidden group hover:shadow-xl transition-all">
                   {p.image_url && (
                     <div className="aspect-[16/10] overflow-hidden bg-muted">
@@ -167,7 +167,7 @@ function ServicePage() {
             <h2 id="faq-h" className="text-3xl md:text-4xl font-bold text-primary">إجابات على أكثر التساؤلات</h2>
           </header>
           <div className="space-y-4">
-            {service.faqs.map((f, i) => <FaqItem key={i} q={f.q} a={f.a} defaultOpen={i === 0} />)}
+            {service.faqs.map((f: FAQ, i: number) => <FaqItem key={i} q={f.q} a={f.a} defaultOpen={i === 0} />)}
           </div>
         </div>
       </section>
