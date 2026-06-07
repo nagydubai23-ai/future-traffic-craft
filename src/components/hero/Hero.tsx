@@ -1,8 +1,10 @@
 import { ArrowLeft, BarChart3, ShieldCheck, Cpu, MoveDown } from "lucide-react";
 import heroImage from "@/assets/hero-traffic.jpg";
 import { FloatingCard } from "./FloatingCard";
+import { useQuote } from "@/components/quote/QuoteContext";
 
 export function Hero() {
+  const { open } = useQuote();
   return (
     <section
       dir="rtl"
@@ -73,13 +75,14 @@ export function Hero() {
 
             {/* CTAs */}
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href="#contact"
+              <button
+                type="button"
+                onClick={open}
                 className="group inline-flex items-center gap-3 rounded-full bg-[var(--color-accent)] px-7 py-3.5 text-sm font-bold text-[var(--color-primary)] shadow-[0_10px_40px_-10px_rgba(200,241,53,0.6)] transition-all hover:shadow-[0_15px_50px_-10px_rgba(200,241,53,0.8)] hover:-translate-y-0.5"
               >
                 اطلب دراسة مرورية
                 <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              </a>
+              </button>
               <a
                 href="#services"
                 className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
