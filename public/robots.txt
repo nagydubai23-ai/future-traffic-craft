@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /auth
+
+Sitemap: https://atr-traffic.com/sitemap.xml
