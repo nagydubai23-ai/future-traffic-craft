@@ -25,6 +25,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const SERVICES = [
   "دراسة التأثير المروري TIA",
@@ -119,8 +120,27 @@ export function QuoteModal({ open, onOpenChange }: QuoteModalProps) {
   };
   const prev = () => step > 1 && setStep(step - 1);
 
-  const submit = () => {
-    if (!canNext()) return;
+  const [submitting, setSubmitting] = useState(false);
+
+  const submit = async () => {
+    if (!canNext() || submitting) return;
+    setSubmitting(true);
+    const { error } = await supabase.from("quote_requests").insert({
+      service: data.service,
+      details: data.details.trim(),
+      city: data.city,
+      district: data.district.trim() || null,
+      name: data.name.trim(),
+      company: data.company.trim() || null,
+      phone: data.phone.trim(),
+      email: data.email.trim(),
+      file_names: data.files.map((f) => f.name),
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error("تعذر إرسال الطلب. حاول مرة أخرى.");
+      return;
+    }
     setSubmitted(true);
     toast.success("تم استلام طلبك بنجاح، سنتواصل معك قريباً.");
     setTimeout(() => {
@@ -243,9 +263,10 @@ export function QuoteModal({ open, onOpenChange }: QuoteModalProps) {
               <button
                 type="button"
                 onClick={submit}
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-2.5 text-sm font-bold text-[var(--color-primary)] shadow-[0_10px_30px_-10px_rgba(200,241,53,0.7)] transition-all hover:-translate-y-0.5 hover:shadow-[0_15px_40px_-10px_rgba(200,241,53,0.9)]"
+                disabled={submitting}
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-2.5 text-sm font-bold text-[var(--color-primary)] shadow-[0_10px_30px_-10px_rgba(200,241,53,0.7)] transition-all hover:-translate-y-0.5 hover:shadow-[0_15px_40px_-10px_rgba(200,241,53,0.9)] disabled:opacity-60 disabled:hover:translate-y-0"
               >
-                إرسال الطلب
+                {submitting ? "جارٍ الإرسال..." : "إرسال الطلب"}
                 <ArrowLeft className="h-4 w-4" />
               </button>
             )}
