@@ -144,9 +144,28 @@ function CityPage() {
               <p className="text-secondary font-semibold mb-2">الامتثال المحلي</p>
               <h2 id="compliance-h" className="text-3xl md:text-4xl font-bold text-primary leading-tight">الاشتراطات السعودية والمحلية في {city.name_ar}</h2>
             </div>
-            <div className="bg-card border border-border rounded-2xl p-8 md:p-10 text-lg leading-loose text-foreground/90">
-              {city.compliance_info}
-            </div>
+            <article
+              dir="rtl"
+              className="bg-card border border-border rounded-2xl p-8 md:p-10 prose prose-lg max-w-none prose-headings:text-primary prose-a:text-secondary prose-strong:text-primary prose-img:rounded-2xl prose-blockquote:border-r-4 prose-blockquote:border-l-0 prose-blockquote:border-[var(--color-accent)]"
+              dangerouslySetInnerHTML={{ __html: city.compliance_info }}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* SEO Content */}
+      {(city.seo_content_ar || city.body) && (
+        <section aria-labelledby="seo-h" className="py-16 md:py-20">
+          <div className="max-w-[860px] mx-auto px-6">
+            <header className="mb-8">
+              <p className="text-secondary font-semibold mb-2">معلومات إضافية</p>
+              <h2 id="seo-h" className="text-3xl md:text-4xl font-bold text-primary">دراسات مرورية في {city.name_ar} — دليل متكامل</h2>
+            </header>
+            <article
+              dir="rtl"
+              className="prose prose-lg max-w-none prose-headings:text-primary prose-headings:font-bold prose-a:text-secondary prose-strong:text-primary prose-img:rounded-2xl prose-blockquote:border-r-4 prose-blockquote:border-l-0 prose-blockquote:border-[var(--color-accent)] prose-blockquote:bg-muted/40 prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:rounded-lg"
+              dangerouslySetInnerHTML={{ __html: (city.seo_content_ar ?? city.body) as string }}
+            />
           </div>
         </section>
       )}

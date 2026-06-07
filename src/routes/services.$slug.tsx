@@ -148,6 +148,23 @@ function ServicePage() {
         </div>
       </section>
 
+      {/* Rich Content */}
+      {service.content_ar && (
+        <section aria-labelledby="content-h" className="py-16 md:py-20">
+          <div className="max-w-[860px] mx-auto px-6">
+            <header className="mb-8">
+              <p className="text-secondary font-semibold mb-2">تفاصيل الخدمة</p>
+              <h2 id="content-h" className="text-3xl md:text-4xl font-bold text-primary">دليلك الكامل عن {service.title_ar}</h2>
+            </header>
+            <article
+              dir="rtl"
+              className="prose prose-lg max-w-none prose-headings:text-primary prose-headings:font-bold prose-a:text-secondary prose-strong:text-primary prose-img:rounded-2xl prose-blockquote:border-r-4 prose-blockquote:border-l-0 prose-blockquote:border-[var(--color-accent)] prose-blockquote:bg-muted/40 prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:rounded-lg"
+              dangerouslySetInnerHTML={{ __html: service.content_ar }}
+            />
+          </div>
+        </section>
+      )}
+
       {/* Related projects */}
       {projects.length > 0 && (
         <section aria-labelledby="projects-h" className="py-20 md:py-28">
