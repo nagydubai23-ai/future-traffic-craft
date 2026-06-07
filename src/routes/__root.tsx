@@ -18,6 +18,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { LanguageProvider } from "@/lib/i18n";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { organizationJsonLd, BASE_URL } from "@/lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -87,6 +88,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "ارت ترافيك | استشارات هندسة المرور" },
       { name: "description", content: "ارت ترافيك — استشارات هندسة المرور وحلول النقل الذكي للمدن السعودية." },
       { name: "author", content: "Art Traffic" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
+      { property: "og:site_name", content: "ارت ترافيك" },
+      { property: "og:locale", content: "ar_SA" },
+      { property: "og:locale:alternate", content: "en_US" },
       { property: "og:title", content: "ارت ترافيك | استشارات هندسة المرور" },
       { property: "og:description", content: "حلول مرورية ذكية لمدن المستقبل." },
       { property: "og:type", content: "website" },
@@ -103,6 +108,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(organizationJsonLd),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "ارت ترافيك",
+          url: BASE_URL,
+          inLanguage: "ar-SA",
+        }),
       },
     ],
   }),

@@ -4,6 +4,7 @@ import { IconByName } from "@/components/shared/IconByName";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, CheckCircle2, MapPin } from "lucide-react";
+import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/services/$slug")({
   loader: async ({ params }) => {
@@ -14,27 +15,45 @@ export const Route = createFileRoute("/services/$slug")({
   head: ({ loaderData }) => {
     const title = loaderData?.service.title_ar ?? "خدمة";
     const desc = loaderData?.service.short_description ?? "";
+    const slug = loaderData?.service.slug ?? "";
+    const path = `/services/${slug}`;
+    const faqs = loaderData?.service.faqs ?? [];
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
         { property: "og:title", content: `${title} | ارت ترافيك` },
         { property: "og:description", content: desc },
-        { property: "og:url", content: `/services/${loaderData?.service.slug ?? ""}` },
+        { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "article" },
       ],
-      links: [{ rel: "canonical", href: `/services/${loaderData?.service.slug ?? ""}` }],
-      scripts: [{
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Service",
-          name: title,
-          description: desc,
-          provider: { "@type": "Organization", name: "ارت ترافيك" },
-          areaServed: "SA",
-        }),
-      }],
+      links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: title,
+            description: desc,
+            url: `${BASE_URL}${path}`,
+            provider: { "@type": "Organization", name: "ارت ترافيك", url: BASE_URL },
+            areaServed: { "@type": "Country", name: "Saudi Arabia" },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(breadcrumbJsonLd([
+            { name: "الرئيسية", path: "/" },
+            { name: "الخدمات", path: "/services" },
+            { name: title, path },
+          ])),
+        },
+        ...(faqs.length > 0 ? [{
+          type: "application/ld+json",
+          children: JSON.stringify(faqJsonLd(faqs)),
+        }] : []),
+      ],
     };
   },
   component: ServicePage,
