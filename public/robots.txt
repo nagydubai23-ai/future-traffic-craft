@@ -1,7 +1,70 @@
+# Default — allow all crawlers
 User-agent: *
 Allow: /
-
 Disallow: /admin
 Disallow: /auth
+Disallow: /api/
+
+# ===== AI Answer Engines (AEO) =====
+# Explicitly allow major AI crawlers so our content can be cited in
+# ChatGPT, Gemini/Google AI Overviews, Perplexity, Claude, and others.
+
+# OpenAI (ChatGPT browsing + search index)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /auth
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google Gemini / AI Overviews (separate from Googlebot)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Anthropic Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Common Crawl (training corpus used by many LLMs)
+User-agent: CCBot
+Allow: /
+
+# Apple Intelligence / Applebot Extended
+User-agent: Applebot-Extended
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Mistral / You.com / DuckAssist
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
 
 Sitemap: https://atr-traffic.com/sitemap.xml
