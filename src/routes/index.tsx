@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Hero } from "@/components/hero/Hero";
 import { Stats } from "@/components/home/Stats";
 import { Services } from "@/components/home/Services";
+import { AEOFaq } from "@/components/home/AEOFaq";
 import { absUrl, hreflangLinks, BASE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
@@ -36,6 +37,7 @@ function Index() {
       <Hero />
       <Stats />
       <Services />
+      <AEOFaq />
     </main>
   );
 }
