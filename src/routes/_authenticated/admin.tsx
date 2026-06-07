@@ -450,10 +450,11 @@ function CitiesPanel() {
                   </div>
                 </summary>
                 <div className="px-4 pb-4 space-y-2 text-sm">
-                  <CityEditField city={c} field="hero_title" label="عنوان الهيرو" onSave={(v) => update.mutate({ id: c.id, patch: { hero_title: v } })} />
-                  <CityEditField city={c} field="hero_description" label="وصف الهيرو" multiline onSave={(v) => update.mutate({ id: c.id, patch: { hero_description: v } })} />
-                  <CityEditField city={c} field="body" label="المحتوى" multiline onSave={(v) => update.mutate({ id: c.id, patch: { body: v } })} />
-                  <CityEditField city={c} field="image_url" label="رابط الصورة" onSave={(v) => update.mutate({ id: c.id, patch: { image_url: v } })} />
+                   <CityEditField city={c} field="hero_title" label="عنوان الهيرو" onSave={(v) => update.mutate({ id: c.id, patch: { hero_title: v } })} />
+                   <CityEditField city={c} field="hero_description" label="وصف الهيرو" multiline onSave={(v) => update.mutate({ id: c.id, patch: { hero_description: v } })} />
+                   <CityEditField city={c} field="body" label="المحتوى" rich onSave={(v) => update.mutate({ id: c.id, patch: { body: v } })} />
+                   <CityEditField city={c} field="compliance_info" label="معلومات الالتزام (Saudi regs)" rich onSave={(v) => update.mutate({ id: c.id, patch: { compliance_info: v } })} />
+                   <CityEditField city={c} field="image_url" label="رابط الصورة" onSave={(v) => update.mutate({ id: c.id, patch: { image_url: v } })} />
                 </div>
               </details>
             ))}
