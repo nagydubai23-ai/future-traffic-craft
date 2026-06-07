@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
+import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -8,9 +9,16 @@ export const Route = createFileRoute("/about")({
       { name: "description", content: "ارت ترافيك — بيت خبرة سعودي متخصص في استشارات هندسة المرور." },
       { property: "og:title", content: "من نحن | ارت ترافيك" },
       { property: "og:description", content: "بيت خبرة سعودي متخصص في استشارات هندسة المرور." },
-      { property: "og:url", content: "/about" },
+      { property: "og:url", content: absUrl("/about") },
     ],
-    links: [{ rel: "canonical", href: "/about" }],
+    links: [{ rel: "canonical", href: absUrl("/about") }, ...hreflangLinks("/about")],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify(breadcrumbJsonLd([
+        { name: "الرئيسية", path: "/" },
+        { name: "من نحن", path: "/about" },
+      ])),
+    }],
   }),
   component: AboutPage,
 });

@@ -4,6 +4,7 @@ import { listServices, type ServiceRow } from "@/lib/content.functions";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { IconByName } from "@/components/shared/IconByName";
 import { ArrowLeft } from "lucide-react";
+import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 
 const servicesQuery = queryOptions({
   queryKey: ["services", "list"],
@@ -18,9 +19,16 @@ export const Route = createFileRoute("/services/")({
       { name: "description", content: "باقة شاملة من الدراسات والاستشارات الهندسية المرورية." },
       { property: "og:title", content: "خدماتنا | ارت ترافيك" },
       { property: "og:description", content: "باقة شاملة من الدراسات والاستشارات الهندسية المرورية." },
-      { property: "og:url", content: "/services" },
+      { property: "og:url", content: absUrl("/services") },
     ],
-    links: [{ rel: "canonical", href: "/services" }],
+    links: [{ rel: "canonical", href: absUrl("/services") }, ...hreflangLinks("/services")],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify(breadcrumbJsonLd([
+        { name: "الرئيسية", path: "/" },
+        { name: "الخدمات", path: "/services" },
+      ])),
+    }],
   }),
   component: ServicesIndex,
 });

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useQuote } from "@/components/quote/QuoteContext";
+import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -10,9 +11,16 @@ export const Route = createFileRoute("/contact")({
       { name: "description", content: "تواصل مع فريق ارت ترافيك للاستفسارات والعروض." },
       { property: "og:title", content: "تواصل معنا | ارت ترافيك" },
       { property: "og:description", content: "تواصل مع فريق ارت ترافيك للاستفسارات والعروض." },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: absUrl("/contact") },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: absUrl("/contact") }, ...hreflangLinks("/contact")],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify(breadcrumbJsonLd([
+        { name: "الرئيسية", path: "/" },
+        { name: "تواصل معنا", path: "/contact" },
+      ])),
+    }],
   }),
   component: ContactPage,
 });
