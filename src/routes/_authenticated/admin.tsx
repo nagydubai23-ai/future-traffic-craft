@@ -536,3 +536,305 @@ function Empty({ title }: { title: string }) {
     </div>
   );
 }
+
+/* ---------------- Services ---------------- */
+
+function ServicesPanel() {
+  const qc = useQueryClient();
+  const [form, setForm] = useState({
+    slug: "",
+    title_ar: "",
+    title_en: "",
+    short_description: "",
+    hero_description: "",
+    icon_name: "",
+    content_ar: "",
+    image_url: "",
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["services-admin"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .order("display_order")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const add = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("services").insert({
+        slug: form.slug.trim().toLowerCase(),
+        title_ar: form.title_ar.trim(),
+        title_en: form.title_en.trim() || null,
+        short_description: form.short_description.trim() || null,
+        hero_description: form.hero_description.trim() || null,
+        icon_name: form.icon_name.trim() || null,
+        content_ar: form.content_ar || null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["services-admin"] });
+      setForm({ slug: "", title_ar: "", title_en: "", short_description: "", hero_description: "", icon_name: "", content_ar: "", image_url: "" });
+      toast.success("تمت إضافة الخدمة");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const update = useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: TablesUpdate<"services"> }) => {
+      const { error } = await supabase.from("services").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["services-admin"] }),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("services").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["services-admin"] }),
+  });
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+      <div>
+        {isLoading ? (
+          <p className="text-sm text-[oklch(0.45_0.02_247)]">جارٍ التحميل...</p>
+        ) : !data?.length ? (
+          <Empty title="لا توجد خدمات بعد" />
+        ) : (
+          <div className="space-y-3">
+            {data.map((s) => (
+              <details key={s.id} className="bg-white rounded-2xl border border-[oklch(0.929_0.013_255.508)] overflow-hidden">
+                <summary className="cursor-pointer p-4 flex items-center justify-between gap-3 list-none">
+                  <div>
+                    <h3 className="font-bold text-[var(--color-primary)]">{s.title_ar}</h3>
+                    <p className="text-xs text-[oklch(0.45_0.02_247)] mt-0.5">/{s.slug}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch checked={s.is_published} onCheckedChange={(v) => update.mutate({ id: s.id, patch: { is_published: v } })} />
+                    <button onClick={(e) => { e.preventDefault(); if (confirm("حذف؟")) remove.mutate(s.id); }} className="rounded-lg p-1.5 text-red-600 hover:bg-red-50">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </summary>
+                <div className="px-4 pb-4 space-y-2 text-sm">
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="title_ar" label="العنوان بالعربية" onSave={(v) => update.mutate({ id: s.id, patch: { title_ar: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="title_en" label="Title (EN)" onSave={(v) => update.mutate({ id: s.id, patch: { title_en: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="short_description" label="وصف مختصر (SEO)" multiline onSave={(v) => update.mutate({ id: s.id, patch: { short_description: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="hero_description" label="وصف الهيرو" multiline onSave={(v) => update.mutate({ id: s.id, patch: { hero_description: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="icon_name" label="الأيقونة (Lucide name)" onSave={(v) => update.mutate({ id: s.id, patch: { icon_name: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="content_ar" label="المحتوى الكامل" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_ar: v } })} />
+                  <CityEditField city={s as unknown as Record<string, unknown>} field="content_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_en: v } })} />
+                </div>
+              </details>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <aside className="bg-white rounded-2xl p-5 border border-[oklch(0.929_0.013_255.508)] h-fit sticky top-6">
+        <h3 className="font-bold text-[var(--color-primary)] flex items-center gap-2"><Plus className="h-4 w-4" />خدمة جديدة</h3>
+        <form
+          onSubmit={(e) => { e.preventDefault(); if (form.slug && form.title_ar) add.mutate(); }}
+          className="mt-4 space-y-3"
+        >
+          <Field label="المعرف (slug)"><Input dir="ltr" placeholder="traffic-impact-study" value={form.slug} maxLength={80} onChange={(e) => setForm({ ...form, slug: e.target.value.replace(/[^a-z0-9-]/gi, "-") })} /></Field>
+          <Field label="العنوان بالعربية"><Input value={form.title_ar} maxLength={120} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+          <Field label="Title (EN)"><Input dir="ltr" value={form.title_en} maxLength={120} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+          <Field label="وصف مختصر (SEO)"><Textarea rows={2} value={form.short_description} maxLength={300} onChange={(e) => setForm({ ...form, short_description: e.target.value })} /></Field>
+          <Field label="وصف الهيرو"><Textarea rows={2} value={form.hero_description} maxLength={500} onChange={(e) => setForm({ ...form, hero_description: e.target.value })} /></Field>
+          <Field label="الأيقونة (Lucide)"><Input dir="ltr" placeholder="TrafficCone" value={form.icon_name} maxLength={60} onChange={(e) => setForm({ ...form, icon_name: e.target.value })} /></Field>
+          <Field label="المحتوى"><RichTextEditor value={form.content_ar} onChange={(v) => setForm({ ...form, content_ar: v })} minHeight={160} /></Field>
+          <button type="submit" disabled={add.isPending} className="w-full rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-bold text-[var(--color-primary)] disabled:opacity-60">
+            {add.isPending ? "..." : "إضافة الخدمة"}
+          </button>
+        </form>
+      </aside>
+    </div>
+  );
+}
+
+/* ---------------- Blog ---------------- */
+
+function BlogPanel() {
+  const qc = useQueryClient();
+  const [form, setForm] = useState({
+    slug: "",
+    title_ar: "",
+    title_en: "",
+    image_url: "",
+    body_ar: "",
+  });
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["blog-admin"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("blog_posts").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const add = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.from("blog_posts").insert({
+        slug: form.slug.trim().toLowerCase(),
+        title_ar: form.title_ar.trim(),
+        title_en: form.title_en.trim() || null,
+        image_url: form.image_url.trim() || null,
+        body_ar: form.body_ar || null,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["blog-admin"] });
+      setForm({ slug: "", title_ar: "", title_en: "", image_url: "", body_ar: "" });
+      toast.success("تم نشر المقال");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const update = useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: TablesUpdate<"blog_posts"> }) => {
+      const { error } = await supabase.from("blog_posts").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["blog-admin"] }),
+  });
+
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("blog_posts").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["blog-admin"] }),
+  });
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+      <div>
+        {isLoading ? (
+          <p className="text-sm text-[oklch(0.45_0.02_247)]">جارٍ التحميل...</p>
+        ) : !data?.length ? (
+          <Empty title="لا توجد مقالات بعد" />
+        ) : (
+          <div className="space-y-3">
+            {data.map((p) => (
+              <details key={p.id} className="bg-white rounded-2xl border border-[oklch(0.929_0.013_255.508)] overflow-hidden">
+                <summary className="cursor-pointer p-4 flex items-center justify-between gap-3 list-none">
+                  <div className="flex items-center gap-3">
+                    {p.image_url ? (
+                      <img src={p.image_url} alt="" className="h-12 w-16 rounded-lg object-cover" />
+                    ) : (
+                      <div className="h-12 w-16 rounded-lg bg-[var(--color-muted)]" />
+                    )}
+                    <div>
+                      <h3 className="font-bold text-[var(--color-primary)]">{p.title_ar}</h3>
+                      <p className="text-xs text-[oklch(0.45_0.02_247)] mt-0.5">/{p.slug} · {new Date(p.created_at).toLocaleDateString("ar-SA")}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Switch checked={p.is_published} onCheckedChange={(v) => update.mutate({ id: p.id, patch: { is_published: v } })} />
+                    <button onClick={(e) => { e.preventDefault(); if (confirm("حذف؟")) remove.mutate(p.id); }} className="rounded-lg p-1.5 text-red-600 hover:bg-red-50">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </summary>
+                <div className="px-4 pb-4 space-y-2 text-sm">
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="title_ar" label="العنوان بالعربية" onSave={(v) => update.mutate({ id: p.id, patch: { title_ar: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="title_en" label="Title (EN)" onSave={(v) => update.mutate({ id: p.id, patch: { title_en: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="image_url" label="رابط صورة الغلاف" onSave={(v) => update.mutate({ id: p.id, patch: { image_url: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="body_ar" label="المحتوى بالعربية" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_ar: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="body_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_en: v } })} />
+                </div>
+              </details>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <aside className="bg-white rounded-2xl p-5 border border-[oklch(0.929_0.013_255.508)] h-fit sticky top-6">
+        <h3 className="font-bold text-[var(--color-primary)] flex items-center gap-2"><Plus className="h-4 w-4" />مقال جديد</h3>
+        <form onSubmit={(e) => { e.preventDefault(); if (form.slug && form.title_ar) add.mutate(); }} className="mt-4 space-y-3">
+          <Field label="المعرف (slug)"><Input dir="ltr" placeholder="article-slug" value={form.slug} maxLength={120} onChange={(e) => setForm({ ...form, slug: e.target.value.replace(/[^a-z0-9-]/gi, "-") })} /></Field>
+          <Field label="العنوان بالعربية"><Input value={form.title_ar} maxLength={200} onChange={(e) => setForm({ ...form, title_ar: e.target.value })} /></Field>
+          <Field label="Title (EN)"><Input dir="ltr" value={form.title_en} maxLength={200} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
+          <Field label="رابط صورة الغلاف"><Input dir="ltr" placeholder="https://..." value={form.image_url} maxLength={500} onChange={(e) => setForm({ ...form, image_url: e.target.value })} /></Field>
+          <Field label="المحتوى"><RichTextEditor value={form.body_ar} onChange={(v) => setForm({ ...form, body_ar: v })} minHeight={200} /></Field>
+          <button type="submit" disabled={add.isPending} className="w-full rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-bold text-[var(--color-primary)] disabled:opacity-60">
+            {add.isPending ? "..." : "نشر المقال"}
+          </button>
+        </form>
+      </aside>
+    </div>
+  );
+}
+
+/* ---------------- Users ---------------- */
+
+function UsersPanel() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["users-admin"],
+    queryFn: async () => {
+      const [profilesRes, rolesRes] = await Promise.all([
+        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+        supabase.from("user_roles").select("user_id, role"),
+      ]);
+      if (profilesRes.error) throw profilesRes.error;
+      if (rolesRes.error) throw rolesRes.error;
+      const rolesByUser = new Map<string, string[]>();
+      for (const r of rolesRes.data ?? []) {
+        const arr = rolesByUser.get(r.user_id) ?? [];
+        arr.push(r.role);
+        rolesByUser.set(r.user_id, arr);
+      }
+      return (profilesRes.data ?? []).map((p) => ({ ...p, roles: rolesByUser.get(p.id) ?? [] }));
+    },
+  });
+
+  if (isLoading) return <p className="text-sm text-[oklch(0.45_0.02_247)]">جارٍ التحميل...</p>;
+  if (!data?.length) return <Empty title="لا يوجد مستخدمون مسجلون بعد" />;
+
+  return (
+    <div>
+      <div className="mb-4 rounded-2xl border border-[oklch(0.929_0.013_255.508)] bg-white p-4 text-xs text-[oklch(0.45_0.02_247)]">
+        لإضافة دور admin لمستخدم، استخدم قاعدة البيانات مباشرة:
+        <code dir="ltr" className="mt-2 block rounded-lg bg-[var(--color-muted)] p-2 text-[11px] text-[var(--color-primary)]">
+          INSERT INTO public.user_roles (user_id, role) VALUES ('USER_UUID', 'admin');
+        </code>
+      </div>
+      <div className="space-y-2">
+        {data.map((u) => (
+          <div key={u.id} className="bg-white rounded-2xl p-4 border border-[oklch(0.929_0.013_255.508)] flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <h3 className="font-bold text-[var(--color-primary)] truncate">{u.full_name ?? "بدون اسم"}</h3>
+              <p className="text-xs text-[oklch(0.45_0.02_247)] mt-0.5">
+                <span dir="ltr">{u.email ?? "—"}</span>
+                {u.company ? ` · ${u.company}` : ""}
+                {u.phone ? ` · ${u.phone}` : ""}
+              </p>
+              <p className="text-[11px] text-[oklch(0.45_0.02_247)] mt-1" dir="ltr">{u.id}</p>
+            </div>
+            <div className="flex flex-wrap gap-1 shrink-0">
+              {u.roles.length === 0 ? (
+                <span className="rounded-full bg-[var(--color-muted)] px-2.5 py-1 text-[11px] font-semibold text-[oklch(0.45_0.02_247)]">client</span>
+              ) : (
+                u.roles.map((r) => (
+                  <span key={r} className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${r === "admin" ? "bg-[var(--color-accent)] text-[var(--color-primary)]" : "bg-[var(--color-primary)]/10 text-[var(--color-primary)]"}`}>{r}</span>
+                ))
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
