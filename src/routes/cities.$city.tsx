@@ -4,6 +4,7 @@ import { IconByName } from "@/components/shared/IconByName";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, ShieldCheck, MapPin, Phone } from "lucide-react";
+import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/cities/$city")({
   loader: async ({ params }) => {
@@ -15,27 +16,46 @@ export const Route = createFileRoute("/cities/$city")({
     const name = loaderData?.city.name_ar ?? "";
     const title = loaderData?.city.hero_title ?? `دراسات مرورية في ${name}`;
     const desc = loaderData?.city.hero_description ?? "";
+    const slug = loaderData?.city.slug ?? "";
+    const path = `/cities/${slug}`;
+    const faqs = loaderData?.city.faqs ?? [];
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
         { property: "og:title", content: `${title} | ارت ترافيك` },
         { property: "og:description", content: desc },
-        { property: "og:url", content: `/cities/${loaderData?.city.slug ?? ""}` },
+        { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "website" },
       ],
-      links: [{ rel: "canonical", href: `/cities/${loaderData?.city.slug ?? ""}` }],
-      scripts: [{
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "LocalBusiness",
-          name: `ارت ترافيك - ${name}`,
-          description: desc,
-          areaServed: { "@type": "City", name },
-          address: { "@type": "PostalAddress", addressLocality: name, addressCountry: "SA" },
-        }),
-      }],
+      links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: `ارت ترافيك - ${name}`,
+            description: desc,
+            url: `${BASE_URL}${path}`,
+            areaServed: { "@type": "City", name },
+            address: { "@type": "PostalAddress", addressLocality: name, addressCountry: "SA" },
+            telephone: "+966-50-000-0000",
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(breadcrumbJsonLd([
+            { name: "الرئيسية", path: "/" },
+            { name: "المدن", path: "/" },
+            { name, path },
+          ])),
+        },
+        ...(faqs.length > 0 ? [{
+          type: "application/ld+json",
+          children: JSON.stringify(faqJsonLd(faqs)),
+        }] : []),
+      ],
     };
   },
   component: CityPage,
