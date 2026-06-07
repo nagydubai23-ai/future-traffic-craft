@@ -486,12 +486,14 @@ function CityEditField({
   field,
   label,
   multiline,
+  rich,
   onSave,
 }: {
   city: Record<string, unknown>;
   field: string;
   label: string;
   multiline?: boolean;
+  rich?: boolean;
   onSave: (v: string) => void;
 }) {
   const [val, setVal] = useState<string>((city[field] as string) ?? "");
@@ -501,7 +503,9 @@ function CityEditField({
     <div>
       <Label className="text-xs text-[oklch(0.45_0.02_247)]">{label}</Label>
       <div className="mt-1 flex gap-2">
-        {multiline ? (
+        {rich ? (
+          <div className="flex-1"><RichTextEditor value={val} onChange={setVal} minHeight={180} /></div>
+        ) : multiline ? (
           <Textarea rows={3} value={val} onChange={(e) => setVal(e.target.value)} className="flex-1" />
         ) : (
           <Input value={val} onChange={(e) => setVal(e.target.value)} className="flex-1" />
