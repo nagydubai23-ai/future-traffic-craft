@@ -1,7 +1,9 @@
-// AEO-focused FAQ. Plain semantic HTML + FAQPage JSON-LD + Speakable schema
+// AEO-focused FAQ accordion. Semantic HTML + FAQPage JSON-LD + Speakable schema
 // so ChatGPT, Perplexity, Gemini, and Google AI Overviews can quote answers
 // directly. Keep answers short, factual, and self-contained — answer engines
 // favor 40–80 word definitional responses.
+
+import { useState } from "react";
 
 const FAQS = [
   {
@@ -27,6 +29,8 @@ const FAQS = [
 ];
 
 export function AEOFaq() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -40,6 +44,9 @@ export function AEOFaq() {
       cssSelector: [".aeo-question", ".aeo-answer"],
     },
   };
+
+  const toggle = (i: number) =>
+    setOpenIndex((prev) => (prev === i ? null : i));
 
   return (
     <section
@@ -56,34 +63,56 @@ export function AEOFaq() {
       </header>
 
       <div className="max-w-3xl mx-auto space-y-4">
-        {FAQS.map((f, i) => (
-          <article
-            key={i}
-            itemScope
-            itemType="https://schema.org/Question"
-            className="rounded-2xl border border-border bg-card p-6 shadow-sm"
-          >
-            <h3
-              itemProp="name"
-              className="aeo-question text-lg md:text-xl font-semibold text-foreground"
-            >
-              {f.q}
-            </h3>
-            <div
+        {FAQS.map((f, i) => {
+          const isOpen = openIndex === i;
+          return (
+            <article
+              key={i}
               itemScope
-              itemProp="acceptedAnswer"
-              itemType="https://schema.org/Answer"
-              className="mt-3"
+              itemType="https://schema.org/Question"
+              className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden"
             >
-              <p
-                itemProp="text"
-                className="aeo-answer text-muted-foreground leading-relaxed"
+              <button
+                type="button"
+                onClick={() => toggle(i)}
+                aria-expanded={isOpen}
+                className="w-full flex items-center justify-between gap-4 p-6 text-start focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                {f.a}
-              </p>
-            </div>
-          </article>
-        ))}
+                <h3
+                  itemProp="name"
+                  className="aeo-question text-lg md:text-xl font-semibold text-foreground"
+                >
+                  {f.q}
+                </h3>
+                <span
+                  aria-hidden="true"
+                  className={`shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full border border-border text-sm font-medium transition-transform duration-300 ${
+                    isOpen ? "rotate-180 bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  ↓
+                </span>
+              </button>
+              <div
+                itemScope
+                itemProp="acceptedAnswer"
+                itemType="https://schema.org/Answer"
+                className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <p
+                    itemProp="text"
+                    className="aeo-answer px-6 pb-6 text-muted-foreground leading-relaxed"
+                  >
+                    {f.a}
+                  </p>
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
 
       <script
