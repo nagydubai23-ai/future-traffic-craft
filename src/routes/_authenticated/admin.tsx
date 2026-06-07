@@ -454,6 +454,8 @@ function CitiesPanel() {
                    <CityEditField city={c} field="hero_description" label="وصف الهيرو" multiline onSave={(v) => update.mutate({ id: c.id, patch: { hero_description: v } })} />
                    <CityEditField city={c} field="body" label="المحتوى" rich onSave={(v) => update.mutate({ id: c.id, patch: { body: v } })} />
                    <CityEditField city={c} field="compliance_info" label="معلومات الالتزام (Saudi regs)" rich onSave={(v) => update.mutate({ id: c.id, patch: { compliance_info: v } })} />
+                   <CityEditField city={c} field="seo_content_ar" label="محتوى SEO بالعربية" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_ar: v } })} />
+                   <CityEditField city={c} field="seo_content_en" label="SEO Content (EN)" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_en: v } })} />
                    <CityEditField city={c} field="image_url" label="رابط الصورة" onSave={(v) => update.mutate({ id: c.id, patch: { image_url: v } })} />
                 </div>
               </details>
