@@ -15,6 +15,9 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { QuoteProvider } from "@/components/quote/QuoteContext";
 import { WhatsAppFab } from "@/components/quote/WhatsAppFab";
 import { Toaster } from "@/components/ui/sonner";
+import { LanguageProvider } from "@/lib/i18n";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 function NotFoundComponent() {
   return (
@@ -128,12 +131,16 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <QuoteProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <ConditionalFab />
-        <Toaster position="top-center" richColors dir="rtl" />
-      </QuoteProvider>
+      <LanguageProvider>
+        <QuoteProvider>
+          <ConditionalChrome>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </ConditionalChrome>
+          <ConditionalFab />
+          <Toaster position="top-center" richColors dir="rtl" />
+        </QuoteProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }
@@ -142,4 +149,17 @@ function ConditionalFab() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   if (path.startsWith("/admin") || path.startsWith("/auth")) return null;
   return <WhatsAppFab />;
+}
+
+function ConditionalChrome({ children }: { children: ReactNode }) {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const bare = path.startsWith("/admin") || path.startsWith("/auth");
+  if (bare) return <>{children}</>;
+  return (
+    <>
+      <Header />
+      {children}
+      <Footer />
+    </>
+  );
 }
