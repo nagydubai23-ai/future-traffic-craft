@@ -10,6 +10,7 @@ import {
   ArrowLeft,
   type LucideIcon,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 interface Service {
   icon: LucideIcon;
@@ -17,6 +18,7 @@ interface Service {
   description: string;
   className: string;
   featured?: boolean;
+  slug: string;
 }
 
 const SERVICES: Service[] = [
@@ -26,48 +28,56 @@ const SERVICES: Service[] = [
     description: "تقييم شامل لتأثير المشاريع الجديدة على الشبكة المرورية المحيطة ووضع الحلول.",
     className: "md:col-span-2 md:row-span-2",
     featured: true,
+    slug: "traffic-impact-assessment",
   },
   {
     icon: ShieldCheck,
     title: "دراسات السلامة المرورية",
     description: "تحليل النقاط الخطرة واقتراح تحسينات لرفع مستوى الأمان.",
     className: "md:col-span-2",
+    slug: "traffic-safety",
   },
   {
     icon: Activity,
     title: "تحليل حجم الحركة المرورية",
     description: "قياس وتحليل دقيق لأحجام المرور في الفترات المختلفة.",
     className: "",
+    slug: "traffic-volume-analysis",
   },
   {
     icon: Gauge,
     title: "دراسات السرعة",
     description: "رصد سرعات التشغيل واقتراح الحدود المناسبة.",
     className: "",
+    slug: "speed-studies",
   },
   {
     icon: ParkingSquare,
     title: "دراسات مواقف السيارات",
     description: "تحليل الطلب على المواقف وتصميم حلول مستدامة.",
     className: "md:col-span-2",
+    slug: "parking-studies",
   },
   {
     icon: Bike,
     title: "دراسات المشاة والدراجات",
     description: "تصميم بيئات آمنة وودودة للمشاة وراكبي الدراجات.",
     className: "",
+    slug: "pedestrian-bike-studies",
   },
   {
     icon: TrafficCone,
     title: "تصميم التقاطعات والإشارات",
     description: "تصميم هندسي وإشارات ضوئية بأحدث المعايير.",
     className: "",
+    slug: "intersection-signal-design",
   },
   {
     icon: ClipboardList,
     title: "خطط إدارة المرور TMP",
     description: "خطط متكاملة لإدارة المرور أثناء تنفيذ المشاريع والفعاليات.",
     className: "md:col-span-2",
+    slug: "traffic-management-plans",
   },
 ];
 
@@ -129,8 +139,9 @@ function ServiceCard({ service }: { service: Service }) {
           {service.description}
         </p>
 
-        <a
-          href="#"
+        <Link
+          to="/services/$slug"
+          params={{ slug: service.slug }}
           className={`mt-6 inline-flex items-center gap-2 text-sm font-semibold transition-colors ${
             featured
               ? "text-[var(--color-accent)] hover:text-white"
@@ -139,7 +150,7 @@ function ServiceCard({ service }: { service: Service }) {
         >
           اقرأ المزيد
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1.5" />
-        </a>
+        </Link>
       </div>
     </article>
   );
