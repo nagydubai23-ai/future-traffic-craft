@@ -23,7 +23,7 @@ export const Route = createFileRoute("/llms.txt")({
             .eq("is_published", true),
           supabaseAdmin
             .from("blog_posts")
-            .select("slug, title, excerpt")
+            .select("slug, title_ar, title_en, body_ar")
             .eq("is_published", true)
             .order("created_at", { ascending: false })
             .limit(10),
@@ -72,8 +72,9 @@ export const Route = createFileRoute("/llms.txt")({
         if ((posts.data ?? []).length > 0) {
           lines.push(`## Recent articles`);
           for (const p of posts.data ?? []) {
-            const excerpt = (p.excerpt || "").replace(/\s+/g, " ").trim();
-            lines.push(`- [${p.title}](${BASE_URL}/blog/${p.slug})${excerpt ? `: ${excerpt.slice(0, 160)}` : ""}`);
+            const title = p.title_ar || p.title_en || p.slug;
+            const excerpt = (p.body_ar || "").replace(/\s+/g, " ").trim();
+            lines.push(`- [${title}](${BASE_URL}/blog/${p.slug})${excerpt ? `: ${excerpt.slice(0, 160)}` : ""}`);
           }
           lines.push("");
         }
