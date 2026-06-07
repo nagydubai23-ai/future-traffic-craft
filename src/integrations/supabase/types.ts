@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          body_ar: string | null
+          body_en: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          is_published: boolean
+          slug: string
+          title_ar: string
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          body_ar?: string | null
+          body_en?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          slug: string
+          title_ar: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body_ar?: string | null
+          body_en?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_published?: boolean
+          slug?: string
+          title_ar?: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cities: {
         Row: {
           body: string | null
@@ -28,6 +67,8 @@ export type Database = {
           is_published: boolean
           name_ar: string
           name_en: string | null
+          seo_content_ar: string | null
+          seo_content_en: string | null
           slug: string
           updated_at: string
         }
@@ -44,6 +85,8 @@ export type Database = {
           is_published?: boolean
           name_ar: string
           name_en?: string | null
+          seo_content_ar?: string | null
+          seo_content_en?: string | null
           slug: string
           updated_at?: string
         }
@@ -60,13 +103,46 @@ export type Database = {
           is_published?: boolean
           name_ar?: string
           name_en?: string | null
+          seo_content_ar?: string | null
+          seo_content_en?: string | null
           slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []
       }
       projects: {
         Row: {
+          city_id: string | null
           created_at: string
           description: string | null
           id: string
@@ -74,10 +150,15 @@ export type Database = {
           is_published: boolean
           location: string
           service: string
+          service_id: string | null
+          slug: string | null
           title: string
+          title_ar: string | null
+          title_en: string | null
           updated_at: string
         }
         Insert: {
+          city_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -85,10 +166,15 @@ export type Database = {
           is_published?: boolean
           location: string
           service: string
+          service_id?: string | null
+          slug?: string | null
           title: string
+          title_ar?: string | null
+          title_en?: string | null
           updated_at?: string
         }
         Update: {
+          city_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -96,14 +182,67 @@ export type Database = {
           is_published?: boolean
           location?: string
           service?: string
+          service_id?: string | null
+          slug?: string | null
           title?: string
+          title_ar?: string | null
+          title_en?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "projects_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quote_attachments: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          file_url: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          file_url: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          file_url?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_attachments_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "quote_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       quote_requests: {
         Row: {
           city: string
+          city_id: string | null
+          client_id: string | null
           company: string | null
           created_at: string
           details: string
@@ -115,10 +254,14 @@ export type Database = {
           name: string
           phone: string
           service: string
+          service_id: string | null
+          status: Database["public"]["Enums"]["quote_status"]
           updated_at: string
         }
         Insert: {
           city: string
+          city_id?: string | null
+          client_id?: string | null
           company?: string | null
           created_at?: string
           details: string
@@ -130,10 +273,14 @@ export type Database = {
           name: string
           phone: string
           service: string
+          service_id?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
           updated_at?: string
         }
         Update: {
           city?: string
+          city_id?: string | null
+          client_id?: string | null
           company?: string | null
           created_at?: string
           details?: string
@@ -145,18 +292,40 @@ export type Database = {
           name?: string
           phone?: string
           service?: string
+          service_id?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "quote_requests_city_id_fkey"
+            columns: ["city_id"]
+            isOneToOne: false
+            referencedRelation: "cities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quote_requests_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       services: {
         Row: {
           benefits: Json
           body: string | null
+          content_ar: string | null
+          content_en: string | null
           created_at: string
+          description_ar: string | null
+          description_en: string | null
           display_order: number
           faqs: Json
           hero_description: string | null
+          icon: string | null
           icon_name: string | null
           id: string
           is_published: boolean
@@ -170,10 +339,15 @@ export type Database = {
         Insert: {
           benefits?: Json
           body?: string | null
+          content_ar?: string | null
+          content_en?: string | null
           created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           faqs?: Json
           hero_description?: string | null
+          icon?: string | null
           icon_name?: string | null
           id?: string
           is_published?: boolean
@@ -187,10 +361,15 @@ export type Database = {
         Update: {
           benefits?: Json
           body?: string | null
+          content_ar?: string | null
+          content_en?: string | null
           created_at?: string
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           faqs?: Json
           hero_description?: string | null
+          icon?: string | null
           icon_name?: string | null
           id?: string
           is_published?: boolean
@@ -238,7 +417,8 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "editor" | "user"
+      app_role: "admin" | "editor" | "user" | "client"
+      quote_status: "pending" | "under_review" | "quote_sent" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -366,7 +546,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "editor", "user"],
+      app_role: ["admin", "editor", "user", "client"],
+      quote_status: ["pending", "under_review", "quote_sent", "completed"],
     },
   },
 } as const
