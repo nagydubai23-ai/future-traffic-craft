@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -130,9 +131,15 @@ function RootComponent() {
       <QuoteProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
-        <WhatsAppFab />
+        <ConditionalFab />
         <Toaster position="top-center" richColors dir="rtl" />
       </QuoteProvider>
     </QueryClientProvider>
   );
+}
+
+function ConditionalFab() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/admin") || path.startsWith("/auth")) return null;
+  return <WhatsAppFab />;
 }
