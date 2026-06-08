@@ -28,9 +28,11 @@ import {
   Briefcase,
   Newspaper,
   Users as UsersIcon,
+  LineChart,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
+import { TrackingPanel } from "@/components/admin/TrackingPanel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -149,6 +151,9 @@ function AdminPage() {
             <TabsTrigger value="users" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <UsersIcon className="h-4 w-4" /> المستخدمين
             </TabsTrigger>
+            <TabsTrigger value="tracking" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <LineChart className="h-4 w-4" /> التتبع والتحليلات
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="quotes" className="mt-6"><QuotesPanel /></TabsContent>
@@ -157,6 +162,7 @@ function AdminPage() {
           <TabsContent value="cities" className="mt-6"><CitiesPanel /></TabsContent>
           <TabsContent value="blog" className="mt-6"><BlogPanel /></TabsContent>
           <TabsContent value="users" className="mt-6"><UsersPanel /></TabsContent>
+          <TabsContent value="tracking" className="mt-6"><TrackingPanel /></TabsContent>
         </Tabs>
       </main>
     </div>
