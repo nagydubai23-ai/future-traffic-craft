@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Save, Globe, Image as ImageIcon, FileText, Send, RefreshCw, Bot } from "lucide-react";
+import { Save, Globe, Image as ImageIcon, FileText, Send, Bot } from "lucide-react";
 
 const KEYS = [
   "default_meta_title_template",
