@@ -19,6 +19,7 @@ import { LanguageProvider } from "@/lib/i18n";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { organizationJsonLd, BASE_URL } from "@/lib/seo";
+import { TrackingScripts } from "@/components/TrackingScripts";
 
 function NotFoundComponent() {
   return (
@@ -160,6 +161,7 @@ function RootComponent() {
           </ConditionalChrome>
           <ConditionalFab />
           <Toaster position="top-center" richColors dir="rtl" />
+          <TrackingScripts />
         </QuoteProvider>
       </LanguageProvider>
     </QueryClientProvider>
