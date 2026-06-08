@@ -206,6 +206,30 @@ export type Database = {
         }
         Relationships: []
       }
+      image_alt_texts: {
+        Row: {
+          alt_text: string
+          created_at: string
+          id: string
+          storage_path: string
+          updated_at: string
+        }
+        Insert: {
+          alt_text?: string
+          created_at?: string
+          id?: string
+          storage_path: string
+          updated_at?: string
+        }
+        Update: {
+          alt_text?: string
+          created_at?: string
+          id?: string
+          storage_path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           company: string | null
