@@ -26,8 +26,8 @@ export function telHref(phone: string) {
 
 export function waHref(whatsapp: string, message?: string) {
   const num = sanitizeWhatsapp(whatsapp) || DEFAULT_CONTACT.whatsapp;
-  const msg = message ? `?text=${encodeURIComponent(message)}` : "";
-  return `https://wa.me/${num}${msg}`;
+  const msg = message ? `&text=${encodeURIComponent(message)}` : "";
+  return `https://web.whatsapp.com/send?phone=${num}${msg}`;
 }
 
 export function useContactSettings(): ContactSettings {
