@@ -15,8 +15,8 @@ export interface SeoFieldsValue {
   og_title?: string | null;
   og_description?: string | null;
   canonical_url?: string | null;
-  noindex?: boolean | null;
-  nofollow?: boolean | null;
+  noindex?: boolean;
+  nofollow?: boolean;
   schema_type?: string | null;
   schema_json?: unknown;
   priority?: number | null;
