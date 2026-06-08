@@ -8,6 +8,7 @@ import {
   TrafficCone,
   ClipboardList,
   ArrowLeft,
+  Camera,
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -78,6 +79,13 @@ const SERVICES: Service[] = [
     description: "خطط متكاملة لإدارة المرور أثناء تنفيذ المشاريع والفعاليات.",
     className: "md:col-span-2",
     slug: "traffic-management-plans",
+  },
+  {
+    icon: Camera,
+    title: "مكتب عد مروري (TMC & ATC)",
+    description: "جمع وتحليل بيانات الحركة المرورية يدوياً وآلياً بدقة هندسية معتمدة.",
+    className: "md:col-span-2",
+    slug: "traffic-counting",
   },
 ];
 
