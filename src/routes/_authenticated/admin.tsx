@@ -768,9 +768,14 @@ function BlogPanel() {
                 <div className="px-4 pb-4 space-y-2 text-sm">
                   <CityEditField city={p as unknown as Record<string, unknown>} field="title_ar" label="العنوان بالعربية" onSave={(v) => update.mutate({ id: p.id, patch: { title_ar: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="title_en" label="Title (EN)" onSave={(v) => update.mutate({ id: p.id, patch: { title_en: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="excerpt" label="الملخص (يظهر في القائمة وكـ description)" multiline onSave={(v) => update.mutate({ id: p.id, patch: { excerpt: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="category" label="التصنيف" onSave={(v) => update.mutate({ id: p.id, patch: { category: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="author" label="الكاتب" onSave={(v) => update.mutate({ id: p.id, patch: { author: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="reading_minutes" label="مدة القراءة (دقائق)" onSave={(v) => update.mutate({ id: p.id, patch: { reading_minutes: v ? parseInt(v) : null } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="image_url" label="رابط صورة الغلاف" onSave={(v) => update.mutate({ id: p.id, patch: { image_url: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="body_ar" label="المحتوى بالعربية" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_ar: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="body_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_en: v } })} />
+                  <SeoFieldsInline record={p as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: p.id, patch })} />
                 </div>
               </details>
             ))}
