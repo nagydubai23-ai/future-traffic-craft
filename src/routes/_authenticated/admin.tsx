@@ -177,6 +177,9 @@ function AdminPage() {
             <TabsTrigger value="global-seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <Globe className="h-4 w-4" /> إعدادات SEO عامة
             </TabsTrigger>
+            <TabsTrigger value="images" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <ImageIcon className="h-4 w-4" /> الصور
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
@@ -190,6 +193,7 @@ function AdminPage() {
           <TabsContent value="seo" className="mt-6"><SeoOverviewPanel /></TabsContent>
           <TabsContent value="redirects" className="mt-6"><RedirectsPanel /></TabsContent>
           <TabsContent value="global-seo" className="mt-6"><GlobalSeoPanel /></TabsContent>
+          <TabsContent value="images" className="mt-6"><ImagesPanel /></TabsContent>
         </Tabs>
       </main>
     </div>
