@@ -1,5 +1,5 @@
 // Centralized SEO helpers. Update BASE_URL when the production domain changes.
-export const BASE_URL = "https://atr-traffic.com";
+export const BASE_URL = "https://art-traffics.com";
 export const SITE_NAME_AR = "ارت ترافيك";
 export const SITE_NAME_EN = "Art Traffic";
 
@@ -59,7 +59,7 @@ export const organizationJsonLd = {
   areaServed: { "@type": "Country", name: "Saudi Arabia" },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+966-50-000-0000",
+    telephone: "+966-541-325-922",
     contactType: "customer service",
     areaServed: "SA",
     availableLanguage: ["Arabic", "English"],

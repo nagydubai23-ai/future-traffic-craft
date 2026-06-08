@@ -10,9 +10,9 @@ export type ContactSettings = {
 };
 
 export const DEFAULT_CONTACT: ContactSettings = {
-  phone: "+966 50 000 0000",
-  whatsapp: "966500000000",
-  email: "info@art-traffic.sa",
+  phone: "+966 54 132 5922",
+  whatsapp: "966541325922",
+  email: "info@art-traffics.com",
 };
 
 export function sanitizeWhatsapp(v: string) {
@@ -21,7 +21,7 @@ export function sanitizeWhatsapp(v: string) {
 
 export function telHref(phone: string) {
   const digits = (phone || "").replace(/[^\d+]/g, "");
-  return `tel:${digits || "+966500000000"}`;
+  return `tel:${digits || "+966541325922"}`;
 }
 
 export function waHref(whatsapp: string, message?: string) {
