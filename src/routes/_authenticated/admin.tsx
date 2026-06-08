@@ -33,6 +33,7 @@ import {
   Search,
   ArrowLeftRight,
   Globe,
+  Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
@@ -42,6 +43,7 @@ import { SeoFieldsInline } from "@/components/admin/SeoFieldsGroup";
 import { SeoOverviewPanel } from "@/components/admin/SeoOverviewPanel";
 import { RedirectsPanel } from "@/components/admin/RedirectsPanel";
 import { GlobalSeoPanel } from "@/components/admin/GlobalSeoPanel";
+import { ImagesPanel } from "@/components/admin/ImagesPanel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
