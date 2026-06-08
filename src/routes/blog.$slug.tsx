@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-router";
 import { getBlogPost } from "@/lib/blog.functions";
+import { transformImage } from "@/lib/image-url";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, BASE_URL } from "@/lib/seo";
 import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
 
@@ -149,7 +150,7 @@ function BlogPostPage() {
         {/* Cover */}
         {post.image_url && (
           <div className="max-w-[920px] mx-auto px-6 -mt-10">
-            <img src={post.image_url} alt={post.title_ar} className="w-full rounded-3xl shadow-xl aspect-[16/9] object-cover" />
+            <img src={transformImage(post.image_url, { width: 1600 })} alt={post.title_ar} className="w-full rounded-3xl shadow-xl aspect-[16/9] object-cover" />
           </div>
         )}
 
@@ -193,7 +194,7 @@ function BlogPostPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {related.map((r: typeof related[number]) => (
                   <Link key={r.id} to="/blog/$slug" params={{ slug: r.slug }} className="group bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-all">
-                    {r.image_url && <img src={r.image_url} alt={r.title_ar} className="w-full h-40 object-cover" loading="lazy" />}
+                    {r.image_url && <img src={transformImage(r.image_url, { width: 600 })} alt={r.title_ar} className="w-full h-40 object-cover" loading="lazy" />}
                     <div className="p-5">
                       {r.category && <span className="text-[11px] font-bold uppercase text-secondary">{r.category}</span>}
                       <h3 className="font-bold text-primary mt-1 line-clamp-2">{r.title_ar}</h3>

@@ -22,6 +22,10 @@ export function RedirectsPanel() {
   const [form, setForm] = useState({ source: "", destination: "", status_code: "301" });
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const invalidateServerCache = () => {
+    fetch("/api/public/invalidate-redirects", { method: "POST" }).catch(() => {});
+  };
+
   const { data, isLoading } = useQuery<Redirect[]>({
     queryKey: ["redirects-admin"],
     queryFn: async () => {
@@ -38,6 +42,7 @@ export function RedirectsPanel() {
     },
     onSuccess: (_d, vars) => {
       qc.invalidateQueries({ queryKey: ["redirects-admin"] });
+      invalidateServerCache();
       toast.success(`تم حفظ ${vars.length} إعادة توجيه`);
       setForm({ source: "", destination: "", status_code: "301" });
     },
@@ -49,7 +54,10 @@ export function RedirectsPanel() {
       const { error } = await supabase.from("redirects").update(patch).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["redirects-admin"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["redirects-admin"] });
+      invalidateServerCache();
+    },
   });
 
   const remove = useMutation({
@@ -59,6 +67,7 @@ export function RedirectsPanel() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["redirects-admin"] });
+      invalidateServerCache();
       toast.success("تم الحذف");
     },
   });

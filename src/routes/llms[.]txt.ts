@@ -11,7 +11,7 @@ export const Route = createFileRoute("/llms.txt")({
       GET: async () => {
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-        const [services, cities, posts] = await Promise.all([
+        const [services, cities, posts, settings] = await Promise.all([
           supabaseAdmin
             .from("services")
             .select("slug, title_ar, title_en, short_description, description_ar, description_en")
@@ -27,14 +27,21 @@ export const Route = createFileRoute("/llms.txt")({
             .eq("is_published", true)
             .order("created_at", { ascending: false })
             .limit(10),
+          supabaseAdmin
+            .from("site_settings")
+            .select("key, value")
+            .in("key", ["site_name", "site_tagline"]),
         ]);
 
+        const settingsMap: Record<string, string> = {};
+        for (const r of settings.data ?? []) settingsMap[r.key] = r.value ?? "";
+        const siteName = settingsMap.site_name?.trim() || "ART Traffic — ارت ترافيك";
+        const siteTagline = settingsMap.site_tagline?.trim() || "مكتب استشارات هندسية متخصص في الدراسات المرورية في المملكة العربية السعودية: دراسات التأثير المروري (TIA)، السلامة المرورية، تصميم التقاطعات والإشارات، خطط إدارة المرور (TMP)، ودراسات المواقف والمشاة. خدمات معتمدة في الرياض وجدة والدمام ومكة المكرمة والمدينة المنورة.";
+
         const lines: string[] = [];
-        lines.push(`# ART Traffic — ارت ترافيك`);
+        lines.push(`# ${siteName}`);
         lines.push("");
-        lines.push(
-          `> مكتب استشارات هندسية متخصص في الدراسات المرورية في المملكة العربية السعودية: دراسات التأثير المروري (TIA)، السلامة المرورية، تصميم التقاطعات والإشارات، خطط إدارة المرور (TMP)، ودراسات المواقف والمشاة. خدمات معتمدة في الرياض وجدة والدمام ومكة المكرمة والمدينة المنورة.`,
-        );
+        lines.push(`> ${siteTagline}`);
         lines.push("");
         lines.push(
           `ART Traffic (Art Traffic / ارت ترافيك) is a Saudi traffic engineering consultancy delivering Traffic Impact Assessment (TIA), traffic safety audits, intersection and signal design, traffic management plans (TMP), parking studies, and pedestrian/bike studies in compliance with Saudi MOMRAH and municipal regulations.`,
@@ -86,7 +93,7 @@ export const Route = createFileRoute("/llms.txt")({
         return new Response(lines.join("\n"), {
           headers: {
             "Content-Type": "text/plain; charset=utf-8",
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": "public, max-age=0, must-revalidate",
           },
         });
       },

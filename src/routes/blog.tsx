@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 import { listBlogPosts, type BlogPostRow } from "@/lib/blog.functions";
+import { transformImage } from "@/lib/image-url";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({
@@ -63,7 +64,7 @@ function BlogPage() {
                   className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-lg transition-all"
                 >
                   {p.image_url ? (
-                    <img src={p.image_url} alt={p.title_ar} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" loading="lazy" />
+                    <img src={transformImage(p.image_url, { width: 800 })} alt={p.title_ar} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" loading="lazy" />
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-primary/10 to-secondary/10" />
                   )}
