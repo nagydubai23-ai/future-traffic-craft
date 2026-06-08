@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface FAQ { q: string; a: string }
 
@@ -26,7 +27,7 @@ export interface ServiceRow {
   noindex?: boolean | null;
   nofollow?: boolean | null;
   schema_type?: string | null;
-  schema_json?: unknown;
+  schema_json?: Json | null;
 }
 
 export interface CityRow {
@@ -50,7 +51,7 @@ export interface CityRow {
   noindex?: boolean | null;
   nofollow?: boolean | null;
   schema_type?: string | null;
-  schema_json?: unknown;
+  schema_json?: Json | null;
 }
 
 export interface ProjectRow {

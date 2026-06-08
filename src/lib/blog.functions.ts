@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface BlogPostRow {
   id: string;
@@ -22,7 +23,7 @@ export interface BlogPostRow {
   noindex: boolean | null;
   nofollow: boolean | null;
   schema_type: string | null;
-  schema_json: unknown;
+  schema_json: Json | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
