@@ -34,6 +34,7 @@ import {
   ArrowLeftRight,
   Globe,
   Image as ImageIcon,
+  Phone as PhoneIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
@@ -44,6 +45,7 @@ import { SeoOverviewPanel } from "@/components/admin/SeoOverviewPanel";
 import { RedirectsPanel } from "@/components/admin/RedirectsPanel";
 import { GlobalSeoPanel } from "@/components/admin/GlobalSeoPanel";
 import { ImagesPanel } from "@/components/admin/ImagesPanel";
+import { ContactPanel } from "@/components/admin/ContactPanel";
 import { MarkdownContent } from "@/components/MarkdownContent";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -181,6 +183,9 @@ function AdminPage() {
             <TabsTrigger value="images" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <ImageIcon className="h-4 w-4" /> الصور
             </TabsTrigger>
+            <TabsTrigger value="contact" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <PhoneIcon className="h-4 w-4" /> أرقام التواصل
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
@@ -195,6 +200,7 @@ function AdminPage() {
           <TabsContent value="redirects" className="mt-6"><RedirectsPanel /></TabsContent>
           <TabsContent value="global-seo" className="mt-6"><GlobalSeoPanel /></TabsContent>
           <TabsContent value="images" className="mt-6"><ImagesPanel /></TabsContent>
+          <TabsContent value="contact" className="mt-6"><ContactPanel /></TabsContent>
         </Tabs>
       </main>
     </div>

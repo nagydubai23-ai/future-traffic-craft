@@ -3,11 +3,12 @@ import { ArrowLeft, BadgeCheck, MessageCircle, Target, Eye, Award, Users, Buildi
 import { absUrl, hreflangLinks, breadcrumbJsonLd, organizationJsonLd, faqJsonLd } from "@/lib/seo";
 import { useQuote } from "@/components/quote/QuoteContext";
 import aboutHero from "@/assets/about-hero.jpg";
+import { useContactSettings, waHref } from "@/hooks/useContactSettings";
 
 const META_TITLE = "من نحن | مكتب دراسة مرورية معتمد في السعودية — ارت ترافيك";
 const META_DESC = "ارت ترافيك مكتب دراسة مرورية معتمد في المملكة العربية السعودية، متخصص في دراسات الأثر المروري والسلامة المرورية والتنقل الذكي وفق اشتراطات الهيئات والبلديات.";
 
-const WHATSAPP_HREF = `https://wa.me/966500000000?text=${encodeURIComponent("مرحباً، أرغب في طلب دراسة مرورية من مكتب ارت ترافيك المعتمد.")}`;
+const WHATSAPP_MESSAGE = "مرحباً، أرغب في طلب دراسة مرورية من مكتب ارت ترافيك المعتمد.";
 
 const FAQS = [
   { q: "ما الذي يجعل ارت ترافيك مكتب دراسة مرورية معتمد؟", a: "نعمل وفق اشتراطات وزارة النقل والخدمات اللوجستية والأمانات والبلديات السعودية، ويضم فريقنا مهندسين معتمدين من الهيئة السعودية للمهندسين بخبرة تتجاوز 12 عامًا في دراسات الأثر المروري والسلامة." },
