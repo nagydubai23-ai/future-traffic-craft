@@ -8,7 +8,7 @@ Disallow: /admin
 Disallow: /auth
 Disallow: /api/
 
-Sitemap: https://atr-traffic.com/sitemap.xml
+Sitemap: https://art-traffics.com/sitemap.xml
 `;
 
 export const Route = createFileRoute("/robots.txt")({

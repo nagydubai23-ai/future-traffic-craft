@@ -161,7 +161,7 @@ export function SeoFieldsInline({
           </div>
           <div>
             <Label className="text-[11px] text-muted-foreground">Canonical URL</Label>
-            <Input dir="ltr" value={v.canonical_url} onChange={(e) => setV({ ...v, canonical_url: e.target.value })} placeholder="https://atr-traffic.com/..." />
+            <Input dir="ltr" value={v.canonical_url} onChange={(e) => setV({ ...v, canonical_url: e.target.value })} placeholder="https://art-traffics.com/..." />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <label className="flex items-center justify-between rounded-lg border bg-white p-2">
