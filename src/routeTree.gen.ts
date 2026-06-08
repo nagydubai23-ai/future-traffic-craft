@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -23,10 +24,16 @@ import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as CitiesCityRouteImport } from './routes/cities.$city'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ApiPublicPingSearchEnginesRouteImport } from './routes/api/public/ping-search-engines'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProjectsRoute = ProjectsRouteImport.update({
@@ -93,6 +100,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicPingSearchEnginesRoute =
+  ApiPublicPingSearchEnginesRouteImport.update({
+    id: '/api/public/ping-search-engines',
+    path: '/api/public/ping-search-engines',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -102,12 +115,14 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/projects': typeof ProjectsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,12 +132,14 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/projects': typeof ProjectsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services': typeof ServicesIndexRoute
+  '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,12 +151,14 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/projects': typeof ProjectsRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,12 +170,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/llms.txt'
     | '/projects'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/admin'
     | '/blog/$slug'
     | '/cities/$city'
     | '/services/$slug'
     | '/services/'
+    | '/api/public/ping-search-engines'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,12 +187,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/llms.txt'
     | '/projects'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/admin'
     | '/blog/$slug'
     | '/cities/$city'
     | '/services/$slug'
     | '/services'
+    | '/api/public/ping-search-engines'
   id:
     | '__root__'
     | '/'
@@ -182,12 +205,14 @@ export interface FileRouteTypes {
     | '/contact'
     | '/llms.txt'
     | '/projects'
+    | '/robots.txt'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/blog/$slug'
     | '/cities/$city'
     | '/services/$slug'
     | '/services/'
+    | '/api/public/ping-search-engines'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -199,10 +224,12 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   ProjectsRoute: typeof ProjectsRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CitiesCityRoute: typeof CitiesCityRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
+  ApiPublicPingSearchEnginesRoute: typeof ApiPublicPingSearchEnginesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/projects': {
@@ -305,6 +339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/ping-search-engines': {
+      id: '/api/public/ping-search-engines'
+      path: '/api/public/ping-search-engines'
+      fullPath: '/api/public/ping-search-engines'
+      preLoaderRoute: typeof ApiPublicPingSearchEnginesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -338,10 +379,12 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   ProjectsRoute: ProjectsRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CitiesCityRoute: CitiesCityRoute,
   ServicesSlugRoute: ServicesSlugRoute,
   ServicesIndexRoute: ServicesIndexRoute,
+  ApiPublicPingSearchEnginesRoute: ApiPublicPingSearchEnginesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

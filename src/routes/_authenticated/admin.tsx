@@ -30,12 +30,18 @@ import {
   Users as UsersIcon,
   LineChart,
   LayoutDashboard,
+  Search,
+  ArrowLeftRight,
+  Globe,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { TrackingPanel } from "@/components/admin/TrackingPanel";
 import { DashboardPanel } from "@/components/admin/DashboardPanel";
 import { SeoFieldsInline } from "@/components/admin/SeoFieldsGroup";
+import { SeoOverviewPanel } from "@/components/admin/SeoOverviewPanel";
+import { RedirectsPanel } from "@/components/admin/RedirectsPanel";
+import { GlobalSeoPanel } from "@/components/admin/GlobalSeoPanel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -160,6 +166,15 @@ function AdminPage() {
             <TabsTrigger value="tracking" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <LineChart className="h-4 w-4" /> التتبع والتحليلات
             </TabsTrigger>
+            <TabsTrigger value="seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <Search className="h-4 w-4" /> SEO Overview
+            </TabsTrigger>
+            <TabsTrigger value="redirects" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <ArrowLeftRight className="h-4 w-4" /> إعادات التوجيه
+            </TabsTrigger>
+            <TabsTrigger value="global-seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <Globe className="h-4 w-4" /> إعدادات SEO عامة
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
@@ -170,6 +185,9 @@ function AdminPage() {
           <TabsContent value="blog" className="mt-6"><BlogPanel /></TabsContent>
           <TabsContent value="users" className="mt-6"><UsersPanel /></TabsContent>
           <TabsContent value="tracking" className="mt-6"><TrackingPanel /></TabsContent>
+          <TabsContent value="seo" className="mt-6"><SeoOverviewPanel /></TabsContent>
+          <TabsContent value="redirects" className="mt-6"><RedirectsPanel /></TabsContent>
+          <TabsContent value="global-seo" className="mt-6"><GlobalSeoPanel /></TabsContent>
         </Tabs>
       </main>
     </div>

@@ -21,13 +21,17 @@ export const Route = createFileRoute("/cities/$city")({
     const path = `/cities/${slug}`;
     const faqs = loaderData?.city.faqs ?? [];
     const image = c?.og_image || c?.image_url || undefined;
+    const ogTitle = c?.og_title || `${title} | ارت ترافيك`;
+    const ogDesc = c?.og_description || desc;
+    const robotsParts = [c?.noindex ? "noindex" : "index", c?.nofollow ? "nofollow" : "follow"];
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
+        { name: "robots", content: robotsParts.join(", ") },
         ...(c?.keywords ? [{ name: "keywords", content: c.keywords }] : []),
-        { property: "og:title", content: `${title} | ارت ترافيك` },
-        { property: "og:description", content: desc },
+        { property: "og:title", content: ogTitle },
+        { property: "og:description", content: ogDesc },
         { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "website" },
         ...(image ? [
@@ -36,13 +40,16 @@ export const Route = createFileRoute("/cities/$city")({
           { name: "twitter:card", content: "summary_large_image" },
         ] : []),
       ],
-      links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
+      links: [{ rel: "canonical", href: c?.canonical_url || absUrl(path) }, ...hreflangLinks(path)],
       scripts: [
-        {
+        c?.schema_json ? {
+          type: "application/ld+json",
+          children: JSON.stringify(c.schema_json),
+        } : {
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "LocalBusiness",
+            "@type": c?.schema_type || "LocalBusiness",
             name: `ارت ترافيك - ${name}`,
             description: desc,
             url: `${BASE_URL}${path}`,
