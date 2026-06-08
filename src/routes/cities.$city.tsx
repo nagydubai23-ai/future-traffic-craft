@@ -2,6 +2,7 @@ import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-rout
 import { getCity, type FAQ } from "@/lib/content.functions";
 import { IconByName } from "@/components/shared/IconByName";
 import { useQuote } from "@/components/quote/QuoteContext";
+import { HeroBackground } from "@/components/hero/HeroBackground";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, ShieldCheck, MapPin, Phone } from "lucide-react";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
@@ -106,9 +107,9 @@ function CityPage() {
   return (
     <main dir="rtl" className="bg-background text-foreground">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <div className="absolute inset-0 opacity-25" style={{ backgroundImage: "radial-gradient(circle at 80% 20%, var(--color-accent) 0, transparent 45%), radial-gradient(circle at 10% 80%, var(--color-secondary) 0, transparent 45%)" }} />
-        <div className="relative max-w-[1320px] mx-auto px-6 py-24 md:py-32">
+      <section className="relative overflow-hidden bg-[var(--color-primary)] text-primary-foreground">
+        <HeroBackground />
+        <div className="relative z-10 max-w-[1320px] mx-auto px-6 py-24 md:py-32">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/70 flex items-center gap-2">
             <Link to="/" className="hover:text-white">الرئيسية</Link>
             <span>/</span>

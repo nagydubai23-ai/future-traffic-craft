@@ -1,6 +1,6 @@
 import { ArrowLeft, BarChart3, ShieldCheck, Cpu, MoveDown, MessageCircle } from "lucide-react";
-import heroImage from "@/assets/hero-traffic.jpg";
 import { FloatingCard } from "./FloatingCard";
+import { HeroBackground } from "./HeroBackground";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { useContactSettings, waHref } from "@/hooks/useContactSettings";
 
@@ -14,34 +14,7 @@ export function Hero() {
       dir="rtl"
       className="relative min-h-screen w-full overflow-hidden bg-[var(--color-primary)]"
     >
-      {/* Background image */}
-      <img
-        src={heroImage}
-        alt=""
-        aria-hidden="true"
-        width={1920}
-        height={1080}
-        className="absolute inset-0 h-full w-full object-cover opacity-70"
-      />
-
-      {/* Navy gradient overlay */}
-      <div
-        className="absolute inset-0"
-        style={{ background: "var(--gradient-hero)" }}
-      />
-
-      {/* Grid pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-60 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_85%)]" />
-
-      {/* Accent glow */}
-      <div
-        className="pointer-events-none absolute -top-32 -right-32 h-[480px] w-[480px] rounded-full opacity-25 blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--color-accent), transparent 70%)" }}
-      />
-      <div
-        className="pointer-events-none absolute bottom-0 left-1/4 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
-        style={{ background: "radial-gradient(circle, var(--color-secondary), transparent 70%)" }}
-      />
+      <HeroBackground />
 
       {/* Content */}
       <div className="relative z-10 mx-auto flex min-h-screen max-w-[1320px] flex-col px-6 pt-28 pb-16 md:px-10 lg:pt-32">
