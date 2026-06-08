@@ -163,7 +163,7 @@ function BlogPostPage() {
               <div className="mt-10 pt-6 border-t border-border">
                 <p className="text-xs font-bold text-muted-foreground mb-2">الوسوم</p>
                 <div className="flex flex-wrap gap-2">
-                  {post.keywords.split(",").map((k) => {
+                  {post.keywords.split(",").map((k: string) => {
                     const tag = k.trim();
                     if (!tag) return null;
                     return (
@@ -184,7 +184,7 @@ function BlogPostPage() {
             <div className="max-w-[1320px] mx-auto px-6">
               <h2 className="text-2xl md:text-3xl font-bold text-primary mb-8">مقالات ذات صلة</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {related.map((r) => (
+                {related.map((r: typeof related[number]) => (
                   <Link key={r.id} to="/blog/$slug" params={{ slug: r.slug }} className="group bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg transition-all">
                     {r.image_url && <img src={r.image_url} alt={r.title_ar} className="w-full h-40 object-cover" loading="lazy" />}
                     <div className="p-5">

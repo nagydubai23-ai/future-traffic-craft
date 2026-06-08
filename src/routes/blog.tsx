@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
-import { listBlogPosts } from "@/lib/blog.functions";
+import { listBlogPosts, type BlogPostRow } from "@/lib/blog.functions";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({
@@ -55,7 +55,7 @@ function BlogPage() {
             <p className="text-muted-foreground leading-loose max-w-3xl">{t("common.coming_soon")}</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((p) => (
+              {posts.map((p: BlogPostRow) => (
                 <Link
                   key={p.id}
                   to="/blog/$slug"
