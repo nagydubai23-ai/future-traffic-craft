@@ -100,9 +100,9 @@ function ServicePage() {
   return (
     <main dir="rtl" className="bg-background text-foreground">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-bl from-primary via-primary to-secondary text-primary-foreground">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, white 0, transparent 40%)" }} />
-        <div className="relative max-w-[1320px] mx-auto px-6 py-24 md:py-32">
+      <section className="relative overflow-hidden bg-[var(--color-primary)] text-primary-foreground">
+        <HeroBackground />
+        <div className="relative z-10 max-w-[1320px] mx-auto px-6 py-24 md:py-32">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-white/70 flex items-center gap-2">
             <Link to="/" className="hover:text-white">الرئيسية</Link>
             <span>/</span>
