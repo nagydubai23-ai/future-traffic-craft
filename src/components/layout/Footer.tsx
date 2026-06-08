@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useContactSettings } from "@/hooks/useContactSettings";
+import logo from "@/assets/art-traffic-logo.png.asset.json";
 
 export function Footer() {
   const { t, dir, lang } = useI18n();
@@ -11,12 +12,14 @@ export function Footer() {
     <footer dir={dir} className="bg-primary text-primary-foreground mt-20">
       <div className="max-w-[1320px] mx-auto px-6 py-16 grid gap-12 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-10 h-10 rounded-xl bg-[var(--color-accent)] text-primary grid place-items-center font-bold">A</span>
-            <div>
-              <p className="font-bold text-lg leading-none">{t("brand.name")}</p>
-              <p className="text-xs text-white/70 mt-1">{t("brand.tag")}</p>
-            </div>
+          <div className="mb-4">
+            <img
+              src={logo.url}
+              alt={t("brand.name")}
+              className="h-12 w-auto brightness-0 invert"
+              width={200}
+              height={56}
+            />
           </div>
           <p className="text-sm text-white/70 leading-relaxed">
             {lang === "ar"
