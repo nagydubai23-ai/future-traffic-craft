@@ -20,6 +20,13 @@ export interface ServiceRow {
   keywords?: string | null;
   og_image?: string | null;
   image_url?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  canonical_url?: string | null;
+  noindex?: boolean | null;
+  nofollow?: boolean | null;
+  schema_type?: string | null;
+  schema_json?: unknown;
 }
 
 export interface CityRow {
@@ -37,6 +44,13 @@ export interface CityRow {
   meta_description?: string | null;
   keywords?: string | null;
   og_image?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  canonical_url?: string | null;
+  noindex?: boolean | null;
+  nofollow?: boolean | null;
+  schema_type?: string | null;
+  schema_json?: unknown;
 }
 
 export interface ProjectRow {
@@ -65,7 +79,7 @@ export const getService = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: service, error } = await supabaseAdmin
       .from("services")
-      .select("id, slug, title_ar, title_en, icon_name, short_description, hero_description, benefits, process_steps, faqs, body, display_order, is_published, meta_title, meta_description, keywords, og_image")
+      .select("id, slug, title_ar, title_en, icon_name, short_description, hero_description, benefits, process_steps, faqs, body, display_order, is_published, meta_title, meta_description, keywords, og_image, og_title, og_description, canonical_url, noindex, nofollow, schema_type, schema_json")
       .eq("slug", data.slug)
       .eq("is_published", true)
       .maybeSingle();
@@ -89,7 +103,7 @@ export const getCity = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: city, error } = await supabaseAdmin
       .from("cities")
-      .select("id, slug, name_ar, name_en, hero_title, hero_description, compliance_info, faqs, image_url, body, is_published, meta_title, meta_description, keywords, og_image")
+      .select("id, slug, name_ar, name_en, hero_title, hero_description, compliance_info, faqs, image_url, body, is_published, meta_title, meta_description, keywords, og_image, og_title, og_description, canonical_url, noindex, nofollow, schema_type, schema_json")
       .eq("slug", data.slug)
       .eq("is_published", true)
       .maybeSingle();

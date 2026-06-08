@@ -17,6 +17,12 @@ export interface BlogPostRow {
   keywords: string | null;
   og_image: string | null;
   canonical_url: string | null;
+  og_title: string | null;
+  og_description: string | null;
+  noindex: boolean | null;
+  nofollow: boolean | null;
+  schema_type: string | null;
+  schema_json: unknown;
   published_at: string | null;
   created_at: string;
   updated_at: string;
@@ -24,7 +30,7 @@ export interface BlogPostRow {
 }
 
 const SELECT_COLS =
-  "id, slug, title_ar, title_en, body_ar, body_en, image_url, excerpt, category, author, reading_minutes, meta_title, meta_description, keywords, og_image, canonical_url, published_at, created_at, updated_at, is_published";
+  "id, slug, title_ar, title_en, body_ar, body_en, image_url, excerpt, category, author, reading_minutes, meta_title, meta_description, keywords, og_image, canonical_url, og_title, og_description, noindex, nofollow, schema_type, schema_json, published_at, created_at, updated_at, is_published";
 
 export const listBlogPosts = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
