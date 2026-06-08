@@ -83,7 +83,7 @@ export const listImages = createServerFn({ method: "GET" })
     }
     for (const pr of projects.data ?? []) {
       const p = pathFromUrl(pr.image_url);
-      if (p) pushRef(p, { table: "projects", id: pr.id, column: "image_url", label: pr.title_ar });
+      if (p) pushRef(p, { table: "projects", id: pr.id, column: "image_url", label: pr.title_ar ?? "" });
     }
 
     return files.map((f) => ({
