@@ -17,15 +17,19 @@ export const Route = createFileRoute("/blog/$slug")({
     const path = `/blog/${p.slug}`;
     const image = p.og_image || p.image_url || undefined;
     const publishedISO = p.published_at ?? p.created_at;
+    const ogTitle = p.og_title || title;
+    const ogDesc = p.og_description || description;
+    const robotsParts = [p.noindex ? "noindex" : "index", p.nofollow ? "nofollow" : "follow"];
 
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: description },
+        { name: "robots", content: robotsParts.join(", ") },
         ...(p.keywords ? [{ name: "keywords", content: p.keywords }] : []),
         ...(p.author ? [{ name: "author", content: p.author }] : []),
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
+        { property: "og:title", content: ogTitle },
+        { property: "og:description", content: ogDesc },
         { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "article" },
         { property: "og:locale", content: "ar_SA" },
@@ -37,19 +41,22 @@ export const Route = createFileRoute("/blog/$slug")({
           { name: "twitter:image", content: image },
         ] : []),
         { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
+        { name: "twitter:title", content: ogTitle },
+        { name: "twitter:description", content: ogDesc },
       ],
       links: [
         { rel: "canonical", href: p.canonical_url || absUrl(path) },
         ...hreflangLinks(path),
       ],
       scripts: [
-        {
+        p.schema_json ? {
+          type: "application/ld+json",
+          children: JSON.stringify(p.schema_json),
+        } : {
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": p.schema_type || "Article",
             headline: title,
             description,
             image: image ? [image] : undefined,
