@@ -25,6 +25,7 @@ import { Route as CitiesCityRouteImport } from './routes/cities.$city'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as ApiPublicPingSearchEnginesRouteImport } from './routes/api/public/ping-search-engines'
+import { Route as ApiPublicInvalidateRedirectsRouteImport } from './routes/api/public/invalidate-redirects'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -106,6 +107,12 @@ const ApiPublicPingSearchEnginesRoute =
     path: '/api/public/ping-search-engines',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicInvalidateRedirectsRoute =
+  ApiPublicInvalidateRedirectsRouteImport.update({
+    id: '/api/public/invalidate-redirects',
+    path: '/api/public/invalidate-redirects',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/public/invalidate-redirects': typeof ApiPublicInvalidateRedirectsRoute
   '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRoutesByTo {
@@ -139,6 +147,7 @@ export interface FileRoutesByTo {
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services': typeof ServicesIndexRoute
+  '/api/public/invalidate-redirects': typeof ApiPublicInvalidateRedirectsRoute
   '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRoutesById {
@@ -158,6 +167,7 @@ export interface FileRoutesById {
   '/cities/$city': typeof CitiesCityRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
+  '/api/public/invalidate-redirects': typeof ApiPublicInvalidateRedirectsRoute
   '/api/public/ping-search-engines': typeof ApiPublicPingSearchEnginesRoute
 }
 export interface FileRouteTypes {
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/cities/$city'
     | '/services/$slug'
     | '/services/'
+    | '/api/public/invalidate-redirects'
     | '/api/public/ping-search-engines'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/cities/$city'
     | '/services/$slug'
     | '/services'
+    | '/api/public/invalidate-redirects'
     | '/api/public/ping-search-engines'
   id:
     | '__root__'
@@ -212,6 +224,7 @@ export interface FileRouteTypes {
     | '/cities/$city'
     | '/services/$slug'
     | '/services/'
+    | '/api/public/invalidate-redirects'
     | '/api/public/ping-search-engines'
   fileRoutesById: FileRoutesById
 }
@@ -229,6 +242,7 @@ export interface RootRouteChildren {
   CitiesCityRoute: typeof CitiesCityRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
+  ApiPublicInvalidateRedirectsRoute: typeof ApiPublicInvalidateRedirectsRoute
   ApiPublicPingSearchEnginesRoute: typeof ApiPublicPingSearchEnginesRoute
 }
 
@@ -346,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPingSearchEnginesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/invalidate-redirects': {
+      id: '/api/public/invalidate-redirects'
+      path: '/api/public/invalidate-redirects'
+      fullPath: '/api/public/invalidate-redirects'
+      preLoaderRoute: typeof ApiPublicInvalidateRedirectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -384,8 +405,19 @@ const rootRouteChildren: RootRouteChildren = {
   CitiesCityRoute: CitiesCityRoute,
   ServicesSlugRoute: ServicesSlugRoute,
   ServicesIndexRoute: ServicesIndexRoute,
+  ApiPublicInvalidateRedirectsRoute: ApiPublicInvalidateRedirectsRoute,
   ApiPublicPingSearchEnginesRoute: ApiPublicPingSearchEnginesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
