@@ -20,19 +20,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { organizationJsonLd, BASE_URL } from "@/lib/seo";
 import { TrackingScripts } from "@/components/TrackingScripts";
-import { lookupRedirect } from "@/lib/redirects.functions";
 
 function NotFoundComponent() {
-  useEffect(() => {
-    const path = window.location.pathname;
-    lookupRedirect({ data: { path } })
-      .then((r) => {
-        if (r?.destination) {
-          window.location.replace(r.destination);
-        }
-      })
-      .catch(() => {});
-  }, []);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
