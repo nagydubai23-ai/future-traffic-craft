@@ -20,13 +20,17 @@ export const Route = createFileRoute("/services/$slug")({
     const path = `/services/${slug}`;
     const faqs = loaderData?.service.faqs ?? [];
     const image = s?.og_image || s?.image_url || undefined;
+    const ogTitle = s?.og_title || `${title} | ارت ترافيك`;
+    const ogDesc = s?.og_description || desc;
+    const robotsParts = [s?.noindex ? "noindex" : "index", s?.nofollow ? "nofollow" : "follow"];
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
+        { name: "robots", content: robotsParts.join(", ") },
         ...(s?.keywords ? [{ name: "keywords", content: s.keywords }] : []),
-        { property: "og:title", content: `${title} | ارت ترافيك` },
-        { property: "og:description", content: desc },
+        { property: "og:title", content: ogTitle },
+        { property: "og:description", content: ogDesc },
         { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "article" },
         ...(image ? [
@@ -35,13 +39,16 @@ export const Route = createFileRoute("/services/$slug")({
           { name: "twitter:card", content: "summary_large_image" },
         ] : []),
       ],
-      links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
+      links: [{ rel: "canonical", href: s?.canonical_url || absUrl(path) }, ...hreflangLinks(path)],
       scripts: [
-        {
+        s?.schema_json ? {
+          type: "application/ld+json",
+          children: JSON.stringify(s.schema_json),
+        } : {
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Service",
+            "@type": s?.schema_type || "Service",
             name: title,
             description: desc,
             url: `${BASE_URL}${path}`,
