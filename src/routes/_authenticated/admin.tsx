@@ -470,6 +470,7 @@ function CitiesPanel() {
                    <CityEditField city={c} field="seo_content_ar" label="محتوى SEO بالعربية" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_ar: v } })} />
                    <CityEditField city={c} field="seo_content_en" label="SEO Content (EN)" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_en: v } })} />
                    <CityEditField city={c} field="image_url" label="رابط الصورة" onSave={(v) => update.mutate({ id: c.id, patch: { image_url: v } })} />
+                   <SeoFieldsInline record={c as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: c.id, patch })} />
                 </div>
               </details>
             ))}
@@ -648,6 +649,7 @@ function ServicesPanel() {
                   <CityEditField city={s as unknown as Record<string, unknown>} field="icon_name" label="الأيقونة (Lucide name)" onSave={(v) => update.mutate({ id: s.id, patch: { icon_name: v } })} />
                   <CityEditField city={s as unknown as Record<string, unknown>} field="content_ar" label="المحتوى الكامل" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_ar: v } })} />
                   <CityEditField city={s as unknown as Record<string, unknown>} field="content_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_en: v } })} />
+                  <SeoFieldsInline record={s as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: s.id, patch })} />
                 </div>
               </details>
             ))}
