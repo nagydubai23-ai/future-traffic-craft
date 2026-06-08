@@ -6,6 +6,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { useState } from "react";
 import { Search, Eye, Code2 } from "lucide-react";
 import { SeoScoreBadge } from "./SeoScoreBadge";
+import type { Json } from "@/integrations/supabase/types";
 
 export interface SeoFieldsValue {
   meta_title?: string | null;
@@ -18,7 +19,7 @@ export interface SeoFieldsValue {
   noindex?: boolean;
   nofollow?: boolean;
   schema_type?: string | null;
-  schema_json?: unknown;
+  schema_json?: Json;
   priority?: number | null;
   changefreq?: string | null;
 }
@@ -78,10 +79,10 @@ export function SeoFieldsInline({
   const liveRecord = { ...record, ...v };
 
   const handleSave = () => {
-    let schema_json: unknown = null;
+    let schema_json: Json = null;
     if (v.schema_json.trim()) {
       try {
-        schema_json = JSON.parse(v.schema_json);
+        schema_json = JSON.parse(v.schema_json) as Json;
         setJsonErr(null);
       } catch (e) {
         setJsonErr((e as Error).message);
