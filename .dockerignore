@@ -1,0 +1,37 @@
+# VCS
+.git
+.gitignore
+
+# Node / build artifacts
+node_modules
+.output
+dist
+build
+.vite
+.nitro
+
+# Env files (NEVER bake secrets into the image)
+.env
+.env.*
+!.env.production.example
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+*.log
+
+# Lovable internals
+.lovable
+.workspace
+.agents
+.claude
+
+# Supabase local
+supabase/.temp
+supabase/.branches
+
+# Docs / deployment scripts (not needed in the image)
+DEPLOY.md
+deploy
+README.md
