@@ -1,10 +1,14 @@
-import { ArrowLeft, BarChart3, ShieldCheck, Cpu, MoveDown } from "lucide-react";
+import { ArrowLeft, BarChart3, ShieldCheck, Cpu, MoveDown, MessageCircle } from "lucide-react";
 import heroImage from "@/assets/hero-traffic.jpg";
 import { FloatingCard } from "./FloatingCard";
 import { useQuote } from "@/components/quote/QuoteContext";
+import { useContactSettings, waHref } from "@/hooks/useContactSettings";
+
+const WA_MESSAGE = "مرحباً، أرغب في طلب عرض سعر لدراسة مرورية.";
 
 export function Hero() {
   const { open } = useQuote();
+  const { whatsapp } = useContactSettings();
   return (
     <section
       dir="rtl"
@@ -83,6 +87,15 @@ export function Hero() {
                 اطلب دراسة مرورية
                 <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               </button>
+              <a
+                href={waHref(whatsapp, WA_MESSAGE)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-3 rounded-full bg-[#25D366] px-7 py-3.5 text-sm font-bold text-white shadow-[0_10px_40px_-10px_rgba(37,211,102,0.55)] transition-all hover:shadow-[0_15px_50px_-10px_rgba(37,211,102,0.8)] hover:-translate-y-0.5"
+              >
+                <MessageCircle className="h-4 w-4" strokeWidth={2.4} />
+                واتساب فوري
+              </a>
               <a
                 href="#services"
                 className="inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
