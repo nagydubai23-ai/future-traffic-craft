@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
-import { listServices, type ServiceRow } from "@/lib/content.functions";
+import { listServices, getStaticPageSeo, type ServiceRow } from "@/lib/content.functions";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { IconByName } from "@/components/shared/IconByName";
 import { ArrowLeft } from "lucide-react";
@@ -12,13 +12,19 @@ const servicesQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/services/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
-  head: () => ({
+  loader: async ({ context }) => {
+    const [, seo] = await Promise.all([
+      context.queryClient.ensureQueryData(servicesQuery),
+      getStaticPageSeo({ data: { page: "services" } }),
+    ]);
+    return seo;
+  },
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "خدماتنا | ارت ترافيك" },
-      { name: "description", content: "باقة شاملة من الدراسات والاستشارات الهندسية المرورية." },
-      { property: "og:title", content: "خدماتنا | ارت ترافيك" },
-      { property: "og:description", content: "باقة شاملة من الدراسات والاستشارات الهندسية المرورية." },
+      { title: loaderData?.title ?? "خدماتنا | ارت ترافيك" },
+      { name: "description", content: loaderData?.description ?? "" },
+      { property: "og:title", content: loaderData?.title ?? "خدماتنا | ارت ترافيك" },
+      { property: "og:description", content: loaderData?.description ?? "" },
       { property: "og:url", content: absUrl("/services") },
     ],
     links: [{ rel: "canonical", href: absUrl("/services") }, ...hreflangLinks("/services")],

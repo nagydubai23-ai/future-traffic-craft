@@ -1,69 +1,40 @@
-# Art Traffic — Hero Section Plan
+## الهدف
+جعل meta title و meta description لكل صفحة ثابتة قابلة للتعديل من لوحة التحكم (المقالات والخدمات والمدن لديها بالفعل عبر تبويب SEO).
 
-Building the foundational setup plus a premium, full-screen RTL hero for **ارت ترافيك**, a Saudi traffic engineering consultancy.
+## الصفحات المشمولة
+- الرئيسية `/`
+- من نحن `/about`
+- تواصل معنا `/contact`
+- الخدمات `/services`
+- المدونة `/blog`
+- المشاريع `/projects`
 
-## 1. Global Foundation
+## التنفيذ
 
-**Fonts (loaded via `<link>` in `src/routes/__root.tsx`):**
-- Arabic: Tajawal (400, 500, 700, 800)
-- English headings: Syne (600, 700, 800)
-- English body: DM Sans (400, 500)
+### 1. تخزين في قاعدة البيانات
+استخدام جدول `site_settings` الموجود (key/value). لكل صفحة مفتاحان:
+- `seo:<page>:title`
+- `seo:<page>:description`
 
-**Direction:** `<html lang="ar" dir="rtl">` in root shell.
+(لا حاجة لمايقريشن — الجدول جاهز.)
 
-**Design tokens in `src/styles.css` (`@theme` + `:root`, oklch values):**
-- `--color-primary` Deep Navy `#062B52`
-- `--color-secondary` Engineering Blue `#1677C8`
-- `--color-accent` Lime Green `#C8F135`
-- `--color-background` White, `--color-muted` Soft Gray `#F5F7FA`
-- `--color-foreground` `#111111`
-- Font tokens: `--font-arabic`, `--font-display`, `--font-body`
-- Gradient + glass tokens: `--gradient-hero`, `--shadow-glass`
+### 2. لوحة التحكم
+تبويب جديد في admin اسمه **"SEO الصفحات الثابتة"** يعرض قائمة بالصفحات الستة، ولكل صفحة:
+- حقل Meta Title (مع عداد ≤60)
+- حقل Meta Description (مع عداد ≤160)
+- زر حفظ موحّد
 
-Body defaults to Tajawal when `dir="rtl"`.
+ملف جديد: `src/components/admin/StaticPagesSeoPanel.tsx`.
 
-## 2. Hero Section (`src/components/hero/Hero.tsx`, used by `src/routes/index.tsx`)
+### 3. تحميل القيم في كل صفحة
+- إضافة server function `getStaticPageSeo({ page })` في `src/lib/content.functions.ts` تقرأ المفتاحين وترجع `{ title, description }` مع fallback للقيم الحالية المكتوبة في الكود.
+- استدعاؤها من `loader` في كل صفحة من الست، ثم استخدام النتيجة داخل `head({ loaderData })` لتعيين `title` و `description` و `og:title` و `og:description`.
+- القيم الحالية في الكود تبقى كـ defaults حتى لا تتعطل الصفحات قبل الحفظ.
 
-**Layout:** Full-screen (`min-h-screen`), generous padding, max-width 1320px container, RTL-aware (content aligned to the right in RTL).
+### 4. ما لن يتغير
+- لا تعديل على routes أو مخطط قاعدة البيانات.
+- المقالات/الخدمات/المدن تبقى تستخدم حقول SEO الموجودة لديها.
+- لا تغيير على بقية الميزات.
 
-**Background stack (z-ordered):**
-1. High-quality smart highway / intersection image (generated to `src/assets/hero-traffic.jpg`, 1920×1080, premium quality)
-2. Deep Navy gradient overlay: `linear-gradient(120deg, rgba(6,43,82,0.95) 0%, rgba(6,43,82,0.78) 55%, rgba(22,119,200,0.55) 100%)`
-3. Subtle SVG grid pattern (1px lines, 4% opacity white)
-4. Soft accent glow blob (lime/blue) blurred in corner
-
-**Content (right side in RTL, ~60% width on desktop):**
-- Small eyepiece tag with lime dot: "استشارات هندسة المرور"
-- H1 Arabic: **حلول مرورية ذكية لمدن المستقبل** — Tajawal 800, ~clamp(2.75rem, 6vw, 5.25rem), tight leading, white with one word ("ذكية") in lime accent
-- Paragraph: the provided description, Tajawal 400, muted white, max-w-xl
-- CTA row:
-  - Primary: **اطلب دراسة مرورية** — solid lime on navy text, arrow icon
-  - Secondary: **استكشف خدماتنا** — glass outline, white text
-- Trust strip below: small stats (years / projects / cities) separated by dividers
-
-**Floating glass-morphism cards (left side, absolutely positioned, staggered):**
-Each card: `backdrop-blur-xl`, `bg-white/8`, `border border-white/15`, rounded-2xl, soft shadow, small icon in lime-tinted square, title + one-line caption, subtle hover lift.
-1. **Traffic Impact Assessment** — top, icon: bar chart
-2. **Traffic Safety** — middle, icon: shield
-3. **Smart Mobility** — bottom, icon: cpu/route
-
-Cards animate in with a gentle float (CSS `@keyframes` translateY loop, different delays) — Webflow-style restraint, not flashy.
-
-**Scroll indicator:** thin lime line + small Arabic "اسحب للأسفل" at bottom center.
-
-## 3. Files Touched
-
-- `src/styles.css` — tokens, fonts, gradient, glass utility, grid pattern, keyframes
-- `src/routes/__root.tsx` — `<html dir="rtl" lang="ar">`, Google Fonts links, updated title/meta to Art Traffic
-- `src/routes/index.tsx` — render `<Hero />`, SEO meta in Arabic
-- `src/components/hero/Hero.tsx` — section markup
-- `src/components/hero/FloatingCard.tsx` — reusable glass card
-- `src/assets/hero-traffic.jpg` — generated background (premium model for fidelity)
-
-## Technical Notes
-
-- Tailwind v4: all tokens via `@theme` in `src/styles.css`, no `tailwind.config.js`.
-- Fonts loaded via `<link>` only — never `@import` URL.
-- RTL is the default; English fonts are registered for later bilingual pages but the hero ships Arabic.
-- Background image: generated with the `standard` tier to keep it crisp without text artifacts.
-- No external icon libraries beyond `lucide-react` (already present).
+## تأكيد
+هل تريد أن أضمّن أيضاً حقول og:image و canonical للصفحات الثابتة، أم نكتفي بـ title و description فقط؟

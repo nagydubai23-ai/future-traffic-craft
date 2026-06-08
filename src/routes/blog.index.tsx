@@ -2,17 +2,24 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 import { listBlogPosts, type BlogPostRow } from "@/lib/blog.functions";
+import { getStaticPageSeo } from "@/lib/content.functions";
 import { transformImage } from "@/lib/image-url";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/blog/")({
-  loader: () => listBlogPosts(),
-  head: () => ({
+  loader: async () => {
+    const [posts, seo] = await Promise.all([
+      listBlogPosts(),
+      getStaticPageSeo({ data: { page: "blog" } }),
+    ]);
+    return { posts, seo };
+  },
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "المدونة | ارت ترافيك" },
-      { name: "description", content: "أحدث المقالات في هندسة المرور والنقل الذكي." },
-      { property: "og:title", content: "المدونة | ارت ترافيك" },
-      { property: "og:description", content: "أحدث المقالات في هندسة المرور والنقل الذكي." },
+      { title: loaderData?.seo?.title ?? "المدونة | ارت ترافيك" },
+      { name: "description", content: loaderData?.seo?.description ?? "" },
+      { property: "og:title", content: loaderData?.seo?.title ?? "المدونة | ارت ترافيك" },
+      { property: "og:description", content: loaderData?.seo?.description ?? "" },
       { property: "og:url", content: absUrl("/blog") },
     ],
     links: [{ rel: "canonical", href: absUrl("/blog") }, ...hreflangLinks("/blog")],
@@ -41,7 +48,7 @@ export const Route = createFileRoute("/blog/")({
 
 function BlogPage() {
   const { t, dir } = useI18n();
-  const posts = Route.useLoaderData();
+  const { posts } = Route.useLoaderData();
   return (
     <main dir={dir} className="bg-background">
       <section className="bg-gradient-to-bl from-primary to-secondary text-primary-foreground">

@@ -46,6 +46,7 @@ import { RedirectsPanel } from "@/components/admin/RedirectsPanel";
 import { GlobalSeoPanel } from "@/components/admin/GlobalSeoPanel";
 import { ImagesPanel } from "@/components/admin/ImagesPanel";
 import { ContactPanel } from "@/components/admin/ContactPanel";
+import { StaticPagesSeoPanel } from "@/components/admin/StaticPagesSeoPanel";
 import { MarkdownContent } from "@/components/MarkdownContent";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -186,6 +187,9 @@ function AdminPage() {
             <TabsTrigger value="contact" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <PhoneIcon className="h-4 w-4" /> أرقام التواصل
             </TabsTrigger>
+            <TabsTrigger value="static-seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <Search className="h-4 w-4" /> SEO الصفحات الثابتة
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
@@ -201,6 +205,7 @@ function AdminPage() {
           <TabsContent value="global-seo" className="mt-6"><GlobalSeoPanel /></TabsContent>
           <TabsContent value="images" className="mt-6"><ImagesPanel /></TabsContent>
           <TabsContent value="contact" className="mt-6"><ContactPanel /></TabsContent>
+          <TabsContent value="static-seo" className="mt-6"><StaticPagesSeoPanel /></TabsContent>
         </Tabs>
       </main>
     </div>

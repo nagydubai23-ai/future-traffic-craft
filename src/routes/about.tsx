@@ -4,6 +4,7 @@ import { absUrl, hreflangLinks, breadcrumbJsonLd, organizationJsonLd, faqJsonLd 
 import { useQuote } from "@/components/quote/QuoteContext";
 import aboutHero from "@/assets/about-hero.jpg";
 import { useContactSettings, waHref } from "@/hooks/useContactSettings";
+import { getStaticPageSeo } from "@/lib/content.functions";
 
 const META_TITLE = "من نحن | مكتب دراسة مرورية معتمد في السعودية — ارت ترافيك";
 const META_DESC = "ارت ترافيك مكتب دراسة مرورية معتمد في المملكة العربية السعودية، متخصص في دراسات الأثر المروري والسلامة المرورية والتنقل الذكي وفق اشتراطات الهيئات والبلديات.";
@@ -18,13 +19,14 @@ const FAQS = [
 ];
 
 export const Route = createFileRoute("/about")({
-  head: () => ({
+  loader: () => getStaticPageSeo({ data: { page: "about" } }),
+  head: ({ loaderData }) => ({
     meta: [
-      { title: META_TITLE },
-      { name: "description", content: META_DESC },
+      { title: loaderData?.title ?? META_TITLE },
+      { name: "description", content: loaderData?.description ?? META_DESC },
       { name: "keywords", content: "مكتب دراسة مرورية معتمد, دراسة مرورية, استشارات هندسة المرور, دراسة الأثر المروري, السلامة المرورية, ارت ترافيك, السعودية" },
-      { property: "og:title", content: META_TITLE },
-      { property: "og:description", content: META_DESC },
+      { property: "og:title", content: loaderData?.title ?? META_TITLE },
+      { property: "og:description", content: loaderData?.description ?? META_DESC },
       { property: "og:url", content: absUrl("/about") },
       { property: "og:type", content: "website" },
       { property: "og:image", content: absUrl("/og-about.jpg") },
