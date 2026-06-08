@@ -4,14 +4,16 @@ import { Stats } from "@/components/home/Stats";
 import { Services } from "@/components/home/Services";
 import { AEOFaq } from "@/components/home/AEOFaq";
 import { absUrl, hreflangLinks, BASE_URL } from "@/lib/seo";
+import { getStaticPageSeo } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
+  loader: () => getStaticPageSeo({ data: { page: "home" } }),
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "ارت ترافيك | حلول مرورية ذكية لمدن المستقبل" },
-      { name: "description", content: "ارت ترافيك — استشارات هندسة المرور: دراسات الأثر المروري، السلامة المرورية، والتنقل الذكي." },
-      { property: "og:title", content: "ارت ترافيك | حلول مرورية ذكية" },
-      { property: "og:description", content: "دراسات وتحليلات مرورية متقدمة وفق أعلى المعايير الهندسية." },
+      { title: loaderData?.title ?? "ارت ترافيك" },
+      { name: "description", content: loaderData?.description ?? "" },
+      { property: "og:title", content: loaderData?.title ?? "ارت ترافيك" },
+      { property: "og:description", content: loaderData?.description ?? "" },
       { property: "og:url", content: absUrl("/") },
     ],
     links: [{ rel: "canonical", href: absUrl("/") }, ...hreflangLinks("/")],

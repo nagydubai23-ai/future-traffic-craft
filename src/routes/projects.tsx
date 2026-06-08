@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
+import { getStaticPageSeo } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/projects")({
-  head: () => ({
+  loader: () => getStaticPageSeo({ data: { page: "projects" } }),
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "المشاريع | ارت ترافيك" },
-      { name: "description", content: "أبرز مشاريع ارت ترافيك في مدن المملكة." },
-      { property: "og:title", content: "المشاريع | ارت ترافيك" },
-      { property: "og:description", content: "أبرز مشاريع ارت ترافيك في مدن المملكة." },
+      { title: loaderData?.title ?? "المشاريع | ارت ترافيك" },
+      { name: "description", content: loaderData?.description ?? "" },
+      { property: "og:title", content: loaderData?.title ?? "المشاريع | ارت ترافيك" },
+      { property: "og:description", content: loaderData?.description ?? "" },
       { property: "og:url", content: absUrl("/projects") },
     ],
     links: [{ rel: "canonical", href: absUrl("/projects") }, ...hreflangLinks("/projects")],

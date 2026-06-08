@@ -4,14 +4,16 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 import { useContactSettings } from "@/hooks/useContactSettings";
+import { getStaticPageSeo } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
+  loader: () => getStaticPageSeo({ data: { page: "contact" } }),
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "تواصل معنا | ارت ترافيك" },
-      { name: "description", content: "تواصل مع فريق ارت ترافيك للاستفسارات والعروض." },
-      { property: "og:title", content: "تواصل معنا | ارت ترافيك" },
-      { property: "og:description", content: "تواصل مع فريق ارت ترافيك للاستفسارات والعروض." },
+      { title: loaderData?.title ?? "تواصل معنا | ارت ترافيك" },
+      { name: "description", content: loaderData?.description ?? "" },
+      { property: "og:title", content: loaderData?.title ?? "تواصل معنا | ارت ترافيك" },
+      { property: "og:description", content: loaderData?.description ?? "" },
       { property: "og:url", content: absUrl("/contact") },
     ],
     links: [{ rel: "canonical", href: absUrl("/contact") }, ...hreflangLinks("/contact")],
