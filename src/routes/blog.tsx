@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
 import { listBlogPosts, type BlogPostRow } from "@/lib/blog.functions";
+import { transformImage } from "@/lib/image-url";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/blog")({

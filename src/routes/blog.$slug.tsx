@@ -1,5 +1,6 @@
 import { createFileRoute, notFound, Link, useRouter } from "@tanstack/react-router";
 import { getBlogPost } from "@/lib/blog.functions";
+import { transformImage } from "@/lib/image-url";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, BASE_URL } from "@/lib/seo";
 import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
 
