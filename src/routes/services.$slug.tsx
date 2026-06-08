@@ -196,7 +196,7 @@ function ServicePage() {
                 <article key={p.id} className="bg-card border border-border rounded-2xl overflow-hidden group hover:shadow-xl transition-all">
                   {p.image_url && (
                     <div className="aspect-[16/10] overflow-hidden bg-muted">
-                      <img src={p.image_url} alt={p.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <img src={transformImage(p.image_url, { width: 800 })} alt={p.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     </div>
                   )}
                   <div className="p-6">
