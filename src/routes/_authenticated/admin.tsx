@@ -29,10 +29,13 @@ import {
   Newspaper,
   Users as UsersIcon,
   LineChart,
+  LayoutDashboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { TrackingPanel } from "@/components/admin/TrackingPanel";
+import { DashboardPanel } from "@/components/admin/DashboardPanel";
+import { SeoFieldsInline } from "@/components/admin/SeoFieldsGroup";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -131,8 +134,11 @@ function AdminPage() {
       </header>
 
       <main className="mx-auto max-w-[1320px] px-6 py-10">
-        <Tabs defaultValue="quotes" dir="rtl" className="w-full">
+        <Tabs defaultValue="dashboard" dir="rtl" className="w-full">
           <TabsList className="bg-white border border-[oklch(0.929_0.013_255.508)] p-1 rounded-full h-auto">
+            <TabsTrigger value="dashboard" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <LayoutDashboard className="h-4 w-4" /> الإحصائيات
+            </TabsTrigger>
             <TabsTrigger value="quotes" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <Inbox className="h-4 w-4" /> طلبات الدراسات
             </TabsTrigger>
@@ -156,6 +162,7 @@ function AdminPage() {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
           <TabsContent value="quotes" className="mt-6"><QuotesPanel /></TabsContent>
           <TabsContent value="services" className="mt-6"><ServicesPanel /></TabsContent>
           <TabsContent value="projects" className="mt-6"><ProjectsPanel /></TabsContent>
