@@ -3,6 +3,10 @@ import { Hero } from "@/components/hero/Hero";
 import { Stats } from "@/components/home/Stats";
 import { Services } from "@/components/home/Services";
 import { AEOFaq } from "@/components/home/AEOFaq";
+import { WhyUs } from "@/components/home/WhyUs";
+import { Process } from "@/components/home/Process";
+import { Testimonials } from "@/components/home/Testimonials";
+import { CTABanner } from "@/components/home/CTABanner";
 import { absUrl, hreflangLinks, BASE_URL } from "@/lib/seo";
 import { getStaticPageSeo } from "@/lib/content.functions";
 
@@ -39,7 +43,11 @@ function Index() {
       <Hero />
       <Stats />
       <Services />
+      <WhyUs />
+      <Process />
+      <Testimonials />
       <AEOFaq />
+      <CTABanner />
     </main>
   );
 }
