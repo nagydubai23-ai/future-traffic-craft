@@ -3,6 +3,7 @@ import { getBlogPost } from "@/lib/blog.functions";
 import { transformImage } from "@/lib/image-url";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, BASE_URL } from "@/lib/seo";
 import { Calendar, Clock, User, ArrowLeft } from "lucide-react";
+import { MarkdownContent } from "@/components/MarkdownContent";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -158,11 +159,7 @@ function BlogPostPage() {
         <section className="py-12 md:py-16">
           <div className="max-w-[760px] mx-auto px-6">
             {post.body_ar ? (
-              <div
-                className="prose prose-lg prose-rtl max-w-none prose-headings:text-primary prose-a:text-secondary prose-img:rounded-2xl prose-blockquote:border-secondary"
-                dir="rtl"
-                dangerouslySetInnerHTML={{ __html: post.body_ar }}
-              />
+              <MarkdownContent content={post.body_ar} dir="rtl" />
             ) : (
               <p className="text-muted-foreground">لا يوجد محتوى لهذا المقال بعد.</p>
             )}
