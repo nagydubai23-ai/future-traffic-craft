@@ -3,6 +3,7 @@ import { getService, type FAQ, type ProjectRow } from "@/lib/content.functions";
 import { transformImage } from "@/lib/image-url";
 import { IconByName } from "@/components/shared/IconByName";
 import { useQuote } from "@/components/quote/QuoteContext";
+import { HeroBackground } from "@/components/hero/HeroBackground";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, CheckCircle2, MapPin } from "lucide-react";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
