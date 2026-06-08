@@ -25,19 +25,22 @@ export const Route = createFileRoute("/sitemap.xml")({
         ];
 
         const [services, cities, posts] = await Promise.all([
-          supabaseAdmin.from("services").select("slug, updated_at").eq("is_published", true),
-          supabaseAdmin.from("cities").select("slug, updated_at").eq("is_published", true),
-          supabaseAdmin.from("blog_posts").select("slug, updated_at").eq("is_published", true),
+          supabaseAdmin.from("services").select("slug, updated_at, priority, changefreq, noindex").eq("is_published", true),
+          supabaseAdmin.from("cities").select("slug, updated_at, priority, changefreq, noindex").eq("is_published", true),
+          supabaseAdmin.from("blog_posts").select("slug, updated_at, priority, changefreq, noindex").eq("is_published", true),
         ]);
 
         for (const s of services.data ?? []) {
-          entries.push({ path: `/services/${s.slug}`, lastmod: s.updated_at?.slice(0, 10), changefreq: "monthly", priority: "0.8" });
+          if (s.noindex) continue;
+          entries.push({ path: `/services/${s.slug}`, lastmod: s.updated_at?.slice(0, 10), changefreq: (s.changefreq as SitemapEntry["changefreq"]) ?? "monthly", priority: s.priority != null ? String(s.priority) : "0.8" });
         }
         for (const c of cities.data ?? []) {
-          entries.push({ path: `/cities/${c.slug}`, lastmod: c.updated_at?.slice(0, 10), changefreq: "monthly", priority: "0.8" });
+          if (c.noindex) continue;
+          entries.push({ path: `/cities/${c.slug}`, lastmod: c.updated_at?.slice(0, 10), changefreq: (c.changefreq as SitemapEntry["changefreq"]) ?? "monthly", priority: c.priority != null ? String(c.priority) : "0.8" });
         }
         for (const p of posts.data ?? []) {
-          entries.push({ path: `/blog/${p.slug}`, lastmod: p.updated_at?.slice(0, 10), changefreq: "monthly", priority: "0.6" });
+          if (p.noindex) continue;
+          entries.push({ path: `/blog/${p.slug}`, lastmod: p.updated_at?.slice(0, 10), changefreq: (p.changefreq as SitemapEntry["changefreq"]) ?? "monthly", priority: p.priority != null ? String(p.priority) : "0.6" });
         }
 
         const urls = entries.map((e) =>
