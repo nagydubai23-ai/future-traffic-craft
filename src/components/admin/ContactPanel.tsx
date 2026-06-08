@@ -70,10 +70,10 @@ export function ContactPanel() {
           <div className="rounded-lg bg-[var(--color-primary)]/10 p-2"><Phone className="h-4 w-4 text-[var(--color-primary)]" /></div>
           <div>
             <Label className="text-sm font-semibold">رقم الهاتف (للعرض والاتصال)</Label>
-            <p className="text-xs text-muted-foreground mt-1">يظهر في الفوتر وصفحة التواصل. مثال: +966 50 000 0000</p>
+            <p className="text-xs text-muted-foreground mt-1">يظهر في الفوتر وصفحة التواصل. مثال: +966 54 132 5922</p>
           </div>
         </div>
-        <Input dir="ltr" value={form.contact_phone ?? ""} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} placeholder="+966 50 000 0000" />
+        <Input dir="ltr" value={form.contact_phone ?? ""} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} placeholder="+966 54 132 5922" />
       </div>
 
       <div className="rounded-2xl border bg-white p-5 space-y-3">
@@ -81,10 +81,10 @@ export function ContactPanel() {
           <div className="rounded-lg bg-[#25D366]/10 p-2"><MessageCircle className="h-4 w-4 text-[#25D366]" /></div>
           <div>
             <Label className="text-sm font-semibold">رقم واتساب (أرقام فقط مع رمز الدولة)</Label>
-            <p className="text-xs text-muted-foreground mt-1">يُستخدم في الزر العائم وأزرار CTA. مثال: 966500000000</p>
+            <p className="text-xs text-muted-foreground mt-1">يُستخدم في الزر العائم وأزرار CTA. مثال: 966541325922</p>
           </div>
         </div>
-        <Input dir="ltr" value={form.contact_whatsapp ?? ""} onChange={(e) => setForm({ ...form, contact_whatsapp: e.target.value })} placeholder="966500000000" />
+        <Input dir="ltr" value={form.contact_whatsapp ?? ""} onChange={(e) => setForm({ ...form, contact_whatsapp: e.target.value })} placeholder="966541325922" />
       </div>
 
       <div className="rounded-2xl border bg-white p-5 space-y-3">
@@ -95,7 +95,7 @@ export function ContactPanel() {
             <p className="text-xs text-muted-foreground mt-1">يظهر في الفوتر وصفحة التواصل.</p>
           </div>
         </div>
-        <Input dir="ltr" value={form.contact_email ?? ""} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} placeholder="info@art-traffic.sa" />
+        <Input dir="ltr" value={form.contact_email ?? ""} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} placeholder="info@art-traffics.com" />
       </div>
 
       <button onClick={() => save.mutate()} disabled={save.isPending} className="inline-flex items-center gap-2 rounded-full bg-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-white disabled:opacity-50">
