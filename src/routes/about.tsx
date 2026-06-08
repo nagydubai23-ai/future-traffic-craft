@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, MessageCircle, Target, Eye, Award, Users, Building2, MapPin, ShieldCheck, Compass, Layers } from "lucide-react";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, organizationJsonLd, faqJsonLd } from "@/lib/seo";
 import { useQuote } from "@/components/quote/QuoteContext";
-import { HeroBackground } from "@/components/hero/HeroBackground";
+import aboutHero from "@/assets/about-hero.jpg";
 import { useContactSettings, waHref } from "@/hooks/useContactSettings";
 import { getStaticPageSeo } from "@/lib/content.functions";
 
@@ -56,7 +56,17 @@ function AboutPage() {
     <main dir="rtl" className="bg-background">
       {/* HERO */}
       <section className="relative min-h-[88vh] w-full overflow-hidden bg-[var(--color-primary)]">
-        <HeroBackground />
+        <img
+          src={aboutHero}
+          alt="مكتب دراسة مرورية معتمد — ارت ترافيك"
+          width={1920}
+          height={1080}
+          className="absolute inset-0 h-full w-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(6,43,82,0.95) 0%, rgba(6,43,82,0.78) 55%, rgba(22,119,200,0.45) 100%)" }} />
+        <div className="absolute inset-0 bg-grid-pattern opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_85%)]" />
+        <div className="pointer-events-none absolute -top-32 -left-32 h-[460px] w-[460px] rounded-full opacity-25 blur-3xl"
+             style={{ background: "radial-gradient(circle, var(--color-accent), transparent 70%)" }} />
 
         <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-[1320px] flex-col justify-center px-6 pt-32 pb-20 md:px-10">
           <div className="inline-flex w-fit items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 backdrop-blur-sm">

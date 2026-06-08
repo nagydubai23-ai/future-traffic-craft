@@ -1,5 +1,5 @@
 // Centralized SEO helpers. Update BASE_URL when the production domain changes.
-export const BASE_URL = "https://art-traffics.com";
+export const BASE_URL = "https://atr-traffic.com";
 export const SITE_NAME_AR = "ارت ترافيك";
 export const SITE_NAME_EN = "Art Traffic";
 

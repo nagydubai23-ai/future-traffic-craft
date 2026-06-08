@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
-const SITEMAP = "https://art-traffics.com/sitemap.xml";
+const SITEMAP = "https://atr-traffic.com/sitemap.xml";
 
 export const Route = createFileRoute("/api/public/ping-search-engines")({
   server: {

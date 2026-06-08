@@ -22,7 +22,7 @@ Disallow: /admin
 Disallow: /auth
 Disallow: /api/
 
-Sitemap: https://art-traffics.com/sitemap.xml
+Sitemap: https://atr-traffic.com/sitemap.xml
 `;
 
 export function GlobalSeoPanel() {
