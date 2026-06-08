@@ -101,6 +101,7 @@ interface CityService { id: string; slug: string; title_ar: string; icon_name: s
 function CityPage() {
   const { city, services } = Route.useLoaderData();
   const quote = useQuote();
+  const contact = useContactSettings();
 
   return (
     <main dir="rtl" className="bg-background text-foreground">
