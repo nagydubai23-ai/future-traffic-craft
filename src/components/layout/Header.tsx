@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { Globe, Menu, X } from "lucide-react";
 import { useState } from "react";
+import logo from "@/assets/art-traffic-logo.png.asset.json";
 
 export function Header() {
   const { t, lang, toggle, dir } = useI18n();
@@ -22,9 +23,8 @@ export function Header() {
   return (
     <header dir={dir} className="sticky top-0 z-40 w-full backdrop-blur-md bg-background/80 border-b border-border">
       <div className="max-w-[1320px] mx-auto px-6 h-16 flex items-center justify-between gap-6">
-        <Link to="/" className="flex items-center gap-2 shrink-0">
-          <span className="w-9 h-9 rounded-xl bg-primary text-primary-foreground grid place-items-center font-bold">A</span>
-          <span className="font-bold text-primary text-lg leading-none">{t("brand.name")}</span>
+        <Link to="/" className="flex items-center shrink-0" aria-label={t("brand.name")}>
+          <img src={logo.url} alt={t("brand.name")} className="h-9 w-auto" width={180} height={48} />
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:flex items-center gap-1">
