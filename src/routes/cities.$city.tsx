@@ -5,6 +5,7 @@ import { useQuote } from "@/components/quote/QuoteContext";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, ShieldCheck, MapPin, Phone } from "lucide-react";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
+import { useContactSettings, telHref } from "@/hooks/useContactSettings";
 
 export const Route = createFileRoute("/cities/$city")({
   loader: async ({ params }) => {
