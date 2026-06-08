@@ -123,91 +123,77 @@ function AdminPage() {
 
   return (
     <div dir="rtl" className="min-h-screen bg-[var(--color-muted)]">
-      {/* Header */}
-      <header className="bg-[var(--color-primary)] text-white">
-        <div className="mx-auto max-w-[1320px] flex items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-accent)]/15 ring-1 ring-[var(--color-accent)]/30">
-              <ShieldCheck className="h-5 w-5 text-[var(--color-accent)]" />
+      <Tabs defaultValue="dashboard" dir="rtl" orientation="vertical" className="flex min-h-screen w-full flex-row-reverse">
+        {/* Main content */}
+        <main className="flex-1 min-w-0">
+          <header className="bg-white border-b border-[oklch(0.929_0.013_255.508)]">
+            <div className="flex items-center justify-between px-6 py-4">
+              <div>
+                <h1 className="text-base font-bold text-[var(--color-primary)]">لوحة تحكم ارت ترافيك</h1>
+                <p className="text-xs text-[oklch(0.45_0.02_247)]">{email}</p>
+              </div>
+              <button
+                onClick={signOut}
+                className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.929_0.013_255.508)] bg-white px-4 py-2 text-xs font-semibold text-[var(--color-primary)] hover:bg-[var(--color-muted)]"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                تسجيل الخروج
+              </button>
             </div>
-            <div>
-              <h1 className="text-lg font-bold">لوحة تحكم ارت ترافيك</h1>
-              <p className="text-xs text-white/55">{email}</p>
-            </div>
+          </header>
+          <div className="px-6 py-8">
+            <TabsContent value="dashboard"><DashboardPanel /></TabsContent>
+            <TabsContent value="quotes"><QuotesPanel /></TabsContent>
+            <TabsContent value="services"><ServicesPanel /></TabsContent>
+            <TabsContent value="projects"><ProjectsPanel /></TabsContent>
+            <TabsContent value="cities"><CitiesPanel /></TabsContent>
+            <TabsContent value="blog"><BlogPanel /></TabsContent>
+            <TabsContent value="users"><UsersPanel /></TabsContent>
+            <TabsContent value="tracking"><TrackingPanel /></TabsContent>
+            <TabsContent value="seo"><SeoOverviewPanel /></TabsContent>
+            <TabsContent value="redirects"><RedirectsPanel /></TabsContent>
+            <TabsContent value="global-seo"><GlobalSeoPanel /></TabsContent>
+            <TabsContent value="images"><ImagesPanel /></TabsContent>
+            <TabsContent value="contact"><ContactPanel /></TabsContent>
+            <TabsContent value="static-seo"><StaticPagesSeoPanel /></TabsContent>
           </div>
-          <button
-            onClick={signOut}
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold hover:bg-white/10"
-          >
-            <LogOut className="h-3.5 w-3.5" />
-            تسجيل الخروج
-          </button>
-        </div>
-      </header>
+        </main>
 
-      <main className="mx-auto max-w-[1320px] px-6 py-10">
-        <Tabs defaultValue="dashboard" dir="rtl" className="w-full">
-          <TabsList className="bg-white border border-[oklch(0.929_0.013_255.508)] p-1 rounded-full h-auto">
-            <TabsTrigger value="dashboard" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <LayoutDashboard className="h-4 w-4" /> الإحصائيات
-            </TabsTrigger>
-            <TabsTrigger value="quotes" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Inbox className="h-4 w-4" /> طلبات الدراسات
-            </TabsTrigger>
-            <TabsTrigger value="services" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Briefcase className="h-4 w-4" /> الخدمات
-            </TabsTrigger>
-            <TabsTrigger value="projects" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <FolderKanban className="h-4 w-4" /> المشاريع
-            </TabsTrigger>
-            <TabsTrigger value="cities" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <MapPin className="h-4 w-4" /> صفحات المدن
-            </TabsTrigger>
-            <TabsTrigger value="blog" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Newspaper className="h-4 w-4" /> المدونة
-            </TabsTrigger>
-            <TabsTrigger value="users" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <UsersIcon className="h-4 w-4" /> المستخدمين
-            </TabsTrigger>
-            <TabsTrigger value="tracking" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <LineChart className="h-4 w-4" /> التتبع والتحليلات
-            </TabsTrigger>
-            <TabsTrigger value="seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Search className="h-4 w-4" /> SEO Overview
-            </TabsTrigger>
-            <TabsTrigger value="redirects" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <ArrowLeftRight className="h-4 w-4" /> إعادات التوجيه
-            </TabsTrigger>
-            <TabsTrigger value="global-seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Globe className="h-4 w-4" /> إعدادات SEO عامة
-            </TabsTrigger>
-            <TabsTrigger value="images" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <ImageIcon className="h-4 w-4" /> الصور
-            </TabsTrigger>
-            <TabsTrigger value="contact" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <PhoneIcon className="h-4 w-4" /> أرقام التواصل
-            </TabsTrigger>
-            <TabsTrigger value="static-seo" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
-              <Search className="h-4 w-4" /> SEO الصفحات الثابتة
-            </TabsTrigger>
+        {/* WordPress-style side nav */}
+        <aside className="w-60 shrink-0 bg-[var(--color-primary)] text-white">
+          <div className="flex items-center gap-2 px-4 py-4 border-b border-white/10">
+            <ShieldCheck className="h-5 w-5 text-[var(--color-accent)]" />
+            <span className="text-sm font-bold">الإدارة</span>
+          </div>
+          <TabsList className="flex flex-col h-auto w-full bg-transparent p-0 rounded-none gap-0 items-stretch">
+            {[
+              { v: "dashboard", icon: LayoutDashboard, label: "الإحصائيات" },
+              { v: "quotes", icon: Inbox, label: "طلبات الدراسات" },
+              { v: "services", icon: Briefcase, label: "الخدمات" },
+              { v: "projects", icon: FolderKanban, label: "المشاريع" },
+              { v: "cities", icon: MapPin, label: "صفحات المدن" },
+              { v: "blog", icon: Newspaper, label: "المدونة" },
+              { v: "users", icon: UsersIcon, label: "المستخدمين" },
+              { v: "tracking", icon: LineChart, label: "التتبع والتحليلات" },
+              { v: "seo", icon: Search, label: "SEO Overview" },
+              { v: "redirects", icon: ArrowLeftRight, label: "إعادات التوجيه" },
+              { v: "global-seo", icon: Globe, label: "إعدادات SEO عامة" },
+              { v: "images", icon: ImageIcon, label: "الصور" },
+              { v: "contact", icon: PhoneIcon, label: "أرقام التواصل" },
+              { v: "static-seo", icon: Search, label: "SEO الصفحات الثابتة" },
+            ].map(({ v, icon: Icon, label }) => (
+              <TabsTrigger
+                key={v}
+                value={v}
+                className="justify-start gap-3 rounded-none border-r-2 border-transparent bg-transparent px-4 py-2.5 text-sm font-medium text-white/75 hover:bg-white/5 hover:text-white data-[state=active]:bg-[var(--color-accent)]/10 data-[state=active]:text-[var(--color-accent)] data-[state=active]:border-[var(--color-accent)] data-[state=active]:shadow-none"
+              >
+                <Icon className="h-4 w-4" />
+                <span>{label}</span>
+              </TabsTrigger>
+            ))}
           </TabsList>
-
-          <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
-          <TabsContent value="quotes" className="mt-6"><QuotesPanel /></TabsContent>
-          <TabsContent value="services" className="mt-6"><ServicesPanel /></TabsContent>
-          <TabsContent value="projects" className="mt-6"><ProjectsPanel /></TabsContent>
-          <TabsContent value="cities" className="mt-6"><CitiesPanel /></TabsContent>
-          <TabsContent value="blog" className="mt-6"><BlogPanel /></TabsContent>
-          <TabsContent value="users" className="mt-6"><UsersPanel /></TabsContent>
-          <TabsContent value="tracking" className="mt-6"><TrackingPanel /></TabsContent>
-          <TabsContent value="seo" className="mt-6"><SeoOverviewPanel /></TabsContent>
-          <TabsContent value="redirects" className="mt-6"><RedirectsPanel /></TabsContent>
-          <TabsContent value="global-seo" className="mt-6"><GlobalSeoPanel /></TabsContent>
-          <TabsContent value="images" className="mt-6"><ImagesPanel /></TabsContent>
-          <TabsContent value="contact" className="mt-6"><ContactPanel /></TabsContent>
-          <TabsContent value="static-seo" className="mt-6"><StaticPagesSeoPanel /></TabsContent>
-        </Tabs>
-      </main>
+        </aside>
+      </Tabs>
     </div>
   );
 }
