@@ -3,6 +3,82 @@ import type { Json } from "@/integrations/supabase/types";
 
 export interface FAQ { q: string; a: string }
 
+/* ---------- Static page SEO (admin-editable via site_settings) ---------- */
+
+export type StaticPageKey = "home" | "about" | "contact" | "services" | "blog" | "projects";
+
+export interface StaticPageSeo {
+  title: string;
+  description: string;
+}
+
+export const STATIC_PAGE_DEFAULTS: Record<StaticPageKey, StaticPageSeo & { label: string; path: string }> = {
+  home: {
+    label: "الرئيسية",
+    path: "/",
+    title: "ارت ترافيك | حلول مرورية ذكية لمدن المستقبل",
+    description: "ارت ترافيك — استشارات هندسة المرور: دراسات الأثر المروري، السلامة المرورية، والتنقل الذكي.",
+  },
+  about: {
+    label: "من نحن",
+    path: "/about",
+    title: "من نحن | مكتب دراسة مرورية معتمد في السعودية — ارت ترافيك",
+    description: "ارت ترافيك مكتب دراسة مرورية معتمد في المملكة العربية السعودية، متخصص في دراسات الأثر المروري والسلامة المرورية والتنقل الذكي وفق اشتراطات الهيئات والبلديات.",
+  },
+  contact: {
+    label: "تواصل معنا",
+    path: "/contact",
+    title: "تواصل معنا | ارت ترافيك",
+    description: "تواصل مع فريق ارت ترافيك للاستفسارات والعروض.",
+  },
+  services: {
+    label: "الخدمات",
+    path: "/services",
+    title: "خدماتنا | ارت ترافيك",
+    description: "باقة شاملة من الدراسات والاستشارات الهندسية المرورية.",
+  },
+  blog: {
+    label: "المدونة",
+    path: "/blog",
+    title: "المدونة | ارت ترافيك",
+    description: "أحدث المقالات في هندسة المرور والنقل الذكي.",
+  },
+  projects: {
+    label: "المشاريع",
+    path: "/projects",
+    title: "المشاريع | ارت ترافيك",
+    description: "أبرز مشاريع ارت ترافيك في مدن المملكة.",
+  },
+};
+
+const STATIC_PAGE_KEYS = Object.keys(STATIC_PAGE_DEFAULTS) as StaticPageKey[];
+
+function isStaticPageKey(v: string): v is StaticPageKey {
+  return (STATIC_PAGE_KEYS as string[]).includes(v);
+}
+
+export const getStaticPageSeo = createServerFn({ method: "GET" })
+  .inputValidator((input: { page: StaticPageKey }) => {
+    if (!isStaticPageKey(input.page)) throw new Error("invalid page key");
+    return input;
+  })
+  .handler(async ({ data }): Promise<StaticPageSeo> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const defaults = STATIC_PAGE_DEFAULTS[data.page];
+    const titleKey = `seo:${data.page}:title`;
+    const descKey = `seo:${data.page}:description`;
+    const { data: rows } = await supabaseAdmin
+      .from("site_settings")
+      .select("key,value")
+      .in("key", [titleKey, descKey]);
+    const map: Record<string, string> = {};
+    (rows ?? []).forEach((r) => { if (r.value) map[r.key] = r.value; });
+    return {
+      title: map[titleKey]?.trim() || defaults.title,
+      description: map[descKey]?.trim() || defaults.description,
+    };
+  });
+
 export interface ServiceRow {
   id: string;
   slug: string;
