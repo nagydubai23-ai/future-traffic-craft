@@ -5,6 +5,7 @@ import { useQuote } from "@/components/quote/QuoteContext";
 import { useState } from "react";
 import { ChevronDown, ArrowLeft, ShieldCheck, MapPin, Phone } from "lucide-react";
 import { absUrl, hreflangLinks, breadcrumbJsonLd, faqJsonLd, BASE_URL } from "@/lib/seo";
+import { useContactSettings, telHref } from "@/hooks/useContactSettings";
 
 export const Route = createFileRoute("/cities/$city")({
   loader: async ({ params }) => {
@@ -100,6 +101,7 @@ interface CityService { id: string; slug: string; title_ar: string; icon_name: s
 function CityPage() {
   const { city, services } = Route.useLoaderData();
   const quote = useQuote();
+  const contact = useContactSettings();
 
   return (
     <main dir="rtl" className="bg-background text-foreground">
@@ -212,7 +214,7 @@ function CityPage() {
                 <button onClick={quote.open} className="px-8 py-4 rounded-full bg-[var(--color-accent)] text-primary font-bold inline-flex items-center justify-center gap-2 hover:scale-[1.02] transition">
                   اطلب عرض سعر <ArrowLeft className="w-5 h-5" />
                 </button>
-                <a href="tel:+966500000000" className="px-8 py-4 rounded-full bg-white/10 border border-white/30 backdrop-blur-md inline-flex items-center justify-center gap-2 hover:bg-white/20 transition">
+                <a href={telHref(contact.phone)} className="px-8 py-4 rounded-full bg-white/10 border border-white/30 backdrop-blur-md inline-flex items-center justify-center gap-2 hover:bg-white/20 transition">
                   <Phone className="w-5 h-5" /> اتصل بنا
                 </a>
               </div>

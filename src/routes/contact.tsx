@@ -3,6 +3,7 @@ import { useI18n } from "@/lib/i18n";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useQuote } from "@/components/quote/QuoteContext";
 import { absUrl, hreflangLinks, breadcrumbJsonLd } from "@/lib/seo";
+import { useContactSettings } from "@/hooks/useContactSettings";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   const { t, dir } = useI18n();
   const quote = useQuote();
+  const { phone, email } = useContactSettings();
   return (
     <main dir={dir} className="bg-background">
       <section className="bg-gradient-to-bl from-primary to-secondary text-primary-foreground">
@@ -41,12 +43,12 @@ function ContactPage() {
           <article className="bg-card border border-border rounded-2xl p-7">
             <Mail className="w-7 h-7 text-secondary mb-4" />
             <h2 className="font-bold text-primary mb-1">{t("page.contact.email")}</h2>
-            <p className="text-muted-foreground">info@art-traffic.sa</p>
+            <p className="text-muted-foreground" dir="ltr">{email}</p>
           </article>
           <article className="bg-card border border-border rounded-2xl p-7">
             <Phone className="w-7 h-7 text-secondary mb-4" />
             <h2 className="font-bold text-primary mb-1">{t("page.contact.phone")}</h2>
-            <p className="text-muted-foreground">+966 50 000 0000</p>
+            <p className="text-muted-foreground" dir="ltr">{phone}</p>
           </article>
           <article className="bg-card border border-border rounded-2xl p-7">
             <MapPin className="w-7 h-7 text-secondary mb-4" />

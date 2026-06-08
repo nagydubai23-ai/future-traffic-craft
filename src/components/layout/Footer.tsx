@@ -1,9 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useI18n } from "@/lib/i18n";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { useContactSettings } from "@/hooks/useContactSettings";
 
 export function Footer() {
   const { t, dir, lang } = useI18n();
+  const { phone, email } = useContactSettings();
   const year = new Date().getFullYear();
   return (
     <footer dir={dir} className="bg-primary text-primary-foreground mt-20">
@@ -43,8 +45,8 @@ export function Footer() {
         <div>
           <h3 className="font-bold mb-4 text-[var(--color-accent)]">{t("footer.contact")}</h3>
           <ul className="space-y-3 text-sm text-white/80">
-            <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> info@art-traffic.sa</li>
-            <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> +966 50 000 0000</li>
+            <li className="flex items-center gap-2"><Mail className="w-4 h-4" /> <span dir="ltr">{email}</span></li>
+            <li className="flex items-center gap-2"><Phone className="w-4 h-4" /> <span dir="ltr">{phone}</span></li>
             <li className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {t("page.contact.address.value")}</li>
           </ul>
         </div>

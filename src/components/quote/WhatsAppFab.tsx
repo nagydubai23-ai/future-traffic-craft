@@ -1,10 +1,11 @@
 import { MessageCircle } from "lucide-react";
+import { useContactSettings, waHref } from "@/hooks/useContactSettings";
 
-const PHONE = "966500000000";
 const MESSAGE = "مرحباً، أرغب في الاستفسار عن خدمات ارت ترافيك.";
 
 export function WhatsAppFab() {
-  const href = `https://wa.me/${PHONE}?text=${encodeURIComponent(MESSAGE)}`;
+  const { whatsapp } = useContactSettings();
+  const href = waHref(whatsapp, MESSAGE);
   return (
     <a
       href={href}
