@@ -63,7 +63,7 @@ function BlogPage() {
                   className="group rounded-3xl overflow-hidden bg-card border border-border hover:shadow-lg transition-all"
                 >
                   {p.image_url ? (
-                    <img src={p.image_url} alt={p.title_ar} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" loading="lazy" />
+                    <img src={transformImage(p.image_url, { width: 800 })} alt={p.title_ar} className="w-full h-48 object-cover group-hover:scale-105 transition-transform" loading="lazy" />
                   ) : (
                     <div className="w-full h-48 bg-gradient-to-br from-primary/10 to-secondary/10" />
                   )}
