@@ -5,9 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Save, Globe, Image as ImageIcon, FileText, Send } from "lucide-react";
+import { Save, Globe, Image as ImageIcon, FileText, Send, RefreshCw, Bot } from "lucide-react";
 
-const KEYS = ["default_meta_title_template", "default_og_image", "robots_txt_content"];
+const KEYS = [
+  "default_meta_title_template",
+  "default_og_image",
+  "robots_txt_content",
+  "site_name",
+  "site_tagline",
+];
 
 const DEFAULT_ROBOTS = `# Default — allow all crawlers
 User-agent: *
@@ -39,6 +45,8 @@ export function GlobalSeoPanel() {
         default_meta_title_template: data.default_meta_title_template ?? "%title% | ارت ترافيك",
         default_og_image: data.default_og_image ?? "",
         robots_txt_content: data.robots_txt_content || DEFAULT_ROBOTS,
+        site_name: data.site_name ?? "ART Traffic — ارت ترافيك",
+        site_tagline: data.site_tagline ?? "",
       });
     }
   }, [data]);
@@ -57,6 +65,7 @@ export function GlobalSeoPanel() {
   });
 
   const [pinging, setPinging] = useState(false);
+  const [regen, setRegen] = useState(false);
   const pingEngines = async () => {
     setPinging(true);
     try {
@@ -74,6 +83,19 @@ export function GlobalSeoPanel() {
 
   return (
     <div className="space-y-5">
+      <div className="rounded-2xl border bg-white p-5 space-y-3">
+        <div className="flex items-start gap-3">
+          <div className="rounded-lg bg-[var(--color-primary)]/10 p-2"><Globe className="h-4 w-4 text-[var(--color-primary)]" /></div>
+          <div>
+            <Label className="text-sm font-semibold">اسم الموقع</Label>
+            <p className="text-xs text-muted-foreground mt-1">يُستخدم في llms.txt، schema، والعنوان الافتراضي.</p>
+          </div>
+        </div>
+        <Input value={form.site_name ?? ""} onChange={(e) => setForm({ ...form, site_name: e.target.value })} placeholder="ART Traffic — ارت ترافيك" />
+        <Label className="text-xs font-semibold">وصف مختصر للموقع (Tagline)</Label>
+        <Textarea rows={3} value={form.site_tagline ?? ""} onChange={(e) => setForm({ ...form, site_tagline: e.target.value })} placeholder="مكتب استشارات هندسية متخصص في الدراسات المرورية…" />
+      </div>
+
       <div className="rounded-2xl border bg-white p-5">
         <div className="flex items-start gap-3 mb-3">
           <div className="rounded-lg bg-[var(--color-primary)]/10 p-2"><FileText className="h-4 w-4 text-[var(--color-primary)]" /></div>
@@ -115,6 +137,26 @@ export function GlobalSeoPanel() {
         </button>
         <button onClick={pingEngines} disabled={pinging} className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-[var(--color-primary)] disabled:opacity-50">
           <Send className="h-4 w-4" /> {pinging ? "جاري الإرسال…" : "إعلام Google/Bing بتحديث السايتماب"}
+        </button>
+        <button
+          onClick={async () => {
+            setRegen(true);
+            try {
+              const res = await fetch(`/llms.txt?ts=${Date.now()}`, { cache: "no-store" });
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              await res.text();
+              window.open(`/llms.txt?ts=${Date.now()}`, "_blank");
+              toast.success("تم تحديث llms.txt");
+            } catch (e) {
+              toast.error((e as Error).message);
+            } finally {
+              setRegen(false);
+            }
+          }}
+          disabled={regen}
+          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-primary)] px-6 py-3 text-sm font-semibold text-[var(--color-primary)] disabled:opacity-50"
+        >
+          <Bot className="h-4 w-4" /> {regen ? "جاري التوليد…" : "إعادة توليد llms.txt"}
         </button>
       </div>
     </div>
