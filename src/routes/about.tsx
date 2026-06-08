@@ -71,9 +71,9 @@ function AboutPage() {
 
           <h1 className="mt-7 max-w-4xl font-extrabold leading-[1.1] text-white text-balance"
               style={{ fontSize: "clamp(2.5rem, 6vw, 5.25rem)" }}>
-            نصمم حركة{" "}
+            دراسة{" "}
             <span className="relative inline-block text-[var(--color-accent)]">
-              المدن
+              مرورية
               <span className="absolute inset-x-0 -bottom-1 h-1 rounded-full bg-[var(--color-accent)]/40" />
             </span>
             <br />
