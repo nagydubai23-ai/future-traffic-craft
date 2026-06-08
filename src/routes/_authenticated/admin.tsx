@@ -29,10 +29,13 @@ import {
   Newspaper,
   Users as UsersIcon,
   LineChart,
+  LayoutDashboard,
 } from "lucide-react";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { TrackingPanel } from "@/components/admin/TrackingPanel";
+import { DashboardPanel } from "@/components/admin/DashboardPanel";
+import { SeoFieldsInline } from "@/components/admin/SeoFieldsGroup";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -131,8 +134,11 @@ function AdminPage() {
       </header>
 
       <main className="mx-auto max-w-[1320px] px-6 py-10">
-        <Tabs defaultValue="quotes" dir="rtl" className="w-full">
+        <Tabs defaultValue="dashboard" dir="rtl" className="w-full">
           <TabsList className="bg-white border border-[oklch(0.929_0.013_255.508)] p-1 rounded-full h-auto">
+            <TabsTrigger value="dashboard" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
+              <LayoutDashboard className="h-4 w-4" /> الإحصائيات
+            </TabsTrigger>
             <TabsTrigger value="quotes" className="rounded-full data-[state=active]:bg-[var(--color-primary)] data-[state=active]:text-white gap-2 px-5 py-2">
               <Inbox className="h-4 w-4" /> طلبات الدراسات
             </TabsTrigger>
@@ -156,6 +162,7 @@ function AdminPage() {
             </TabsTrigger>
           </TabsList>
 
+          <TabsContent value="dashboard" className="mt-6"><DashboardPanel /></TabsContent>
           <TabsContent value="quotes" className="mt-6"><QuotesPanel /></TabsContent>
           <TabsContent value="services" className="mt-6"><ServicesPanel /></TabsContent>
           <TabsContent value="projects" className="mt-6"><ProjectsPanel /></TabsContent>
@@ -463,6 +470,7 @@ function CitiesPanel() {
                    <CityEditField city={c} field="seo_content_ar" label="محتوى SEO بالعربية" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_ar: v } })} />
                    <CityEditField city={c} field="seo_content_en" label="SEO Content (EN)" rich onSave={(v) => update.mutate({ id: c.id, patch: { seo_content_en: v } })} />
                    <CityEditField city={c} field="image_url" label="رابط الصورة" onSave={(v) => update.mutate({ id: c.id, patch: { image_url: v } })} />
+                   <SeoFieldsInline record={c as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: c.id, patch })} />
                 </div>
               </details>
             ))}
@@ -641,6 +649,7 @@ function ServicesPanel() {
                   <CityEditField city={s as unknown as Record<string, unknown>} field="icon_name" label="الأيقونة (Lucide name)" onSave={(v) => update.mutate({ id: s.id, patch: { icon_name: v } })} />
                   <CityEditField city={s as unknown as Record<string, unknown>} field="content_ar" label="المحتوى الكامل" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_ar: v } })} />
                   <CityEditField city={s as unknown as Record<string, unknown>} field="content_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: s.id, patch: { content_en: v } })} />
+                  <SeoFieldsInline record={s as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: s.id, patch })} />
                 </div>
               </details>
             ))}
@@ -759,9 +768,14 @@ function BlogPanel() {
                 <div className="px-4 pb-4 space-y-2 text-sm">
                   <CityEditField city={p as unknown as Record<string, unknown>} field="title_ar" label="العنوان بالعربية" onSave={(v) => update.mutate({ id: p.id, patch: { title_ar: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="title_en" label="Title (EN)" onSave={(v) => update.mutate({ id: p.id, patch: { title_en: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="excerpt" label="الملخص (يظهر في القائمة وكـ description)" multiline onSave={(v) => update.mutate({ id: p.id, patch: { excerpt: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="category" label="التصنيف" onSave={(v) => update.mutate({ id: p.id, patch: { category: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="author" label="الكاتب" onSave={(v) => update.mutate({ id: p.id, patch: { author: v } })} />
+                  <CityEditField city={p as unknown as Record<string, unknown>} field="reading_minutes" label="مدة القراءة (دقائق)" onSave={(v) => update.mutate({ id: p.id, patch: { reading_minutes: v ? parseInt(v) : null } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="image_url" label="رابط صورة الغلاف" onSave={(v) => update.mutate({ id: p.id, patch: { image_url: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="body_ar" label="المحتوى بالعربية" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_ar: v } })} />
                   <CityEditField city={p as unknown as Record<string, unknown>} field="body_en" label="Content (EN)" rich onSave={(v) => update.mutate({ id: p.id, patch: { body_en: v } })} />
+                  <SeoFieldsInline record={p as unknown as Record<string, unknown>} onSave={(patch) => update.mutate({ id: p.id, patch })} />
                 </div>
               </details>
             ))}

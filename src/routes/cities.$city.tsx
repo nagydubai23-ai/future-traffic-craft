@@ -13,20 +13,28 @@ export const Route = createFileRoute("/cities/$city")({
     return result;
   },
   head: ({ loaderData }) => {
-    const name = loaderData?.city.name_ar ?? "";
-    const title = loaderData?.city.hero_title ?? `دراسات مرورية في ${name}`;
-    const desc = loaderData?.city.hero_description ?? "";
+    const c = loaderData?.city;
+    const name = c?.name_ar ?? "";
+    const title = c?.meta_title || c?.hero_title || `دراسات مرورية في ${name}`;
+    const desc = c?.meta_description || c?.hero_description || "";
     const slug = loaderData?.city.slug ?? "";
     const path = `/cities/${slug}`;
     const faqs = loaderData?.city.faqs ?? [];
+    const image = c?.og_image || c?.image_url || undefined;
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
+        ...(c?.keywords ? [{ name: "keywords", content: c.keywords }] : []),
         { property: "og:title", content: `${title} | ارت ترافيك` },
         { property: "og:description", content: desc },
         { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "website" },
+        ...(image ? [
+          { property: "og:image", content: image },
+          { name: "twitter:image", content: image },
+          { name: "twitter:card", content: "summary_large_image" },
+        ] : []),
       ],
       links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
       scripts: [

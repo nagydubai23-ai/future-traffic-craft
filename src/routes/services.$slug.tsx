@@ -13,19 +13,27 @@ export const Route = createFileRoute("/services/$slug")({
     return result;
   },
   head: ({ loaderData }) => {
-    const title = loaderData?.service.title_ar ?? "خدمة";
-    const desc = loaderData?.service.short_description ?? "";
+    const s = loaderData?.service;
+    const title = s?.meta_title || s?.title_ar || "خدمة";
+    const desc = s?.meta_description || s?.short_description || "";
     const slug = loaderData?.service.slug ?? "";
     const path = `/services/${slug}`;
     const faqs = loaderData?.service.faqs ?? [];
+    const image = s?.og_image || s?.image_url || undefined;
     return {
       meta: [
         { title: `${title} | ارت ترافيك` },
         { name: "description", content: desc },
+        ...(s?.keywords ? [{ name: "keywords", content: s.keywords }] : []),
         { property: "og:title", content: `${title} | ارت ترافيك` },
         { property: "og:description", content: desc },
         { property: "og:url", content: absUrl(path) },
         { property: "og:type", content: "article" },
+        ...(image ? [
+          { property: "og:image", content: image },
+          { name: "twitter:image", content: image },
+          { name: "twitter:card", content: "summary_large_image" },
+        ] : []),
       ],
       links: [{ rel: "canonical", href: absUrl(path) }, ...hreflangLinks(path)],
       scripts: [

@@ -15,6 +15,11 @@ export interface ServiceRow {
   faqs: FAQ[];
   body: string | null;
   display_order: number;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  keywords?: string | null;
+  og_image?: string | null;
+  image_url?: string | null;
 }
 
 export interface CityRow {
@@ -28,6 +33,10 @@ export interface CityRow {
   faqs: FAQ[];
   image_url: string | null;
   body: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  keywords?: string | null;
+  og_image?: string | null;
 }
 
 export interface ProjectRow {
@@ -56,7 +65,7 @@ export const getService = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: service, error } = await supabaseAdmin
       .from("services")
-      .select("id, slug, title_ar, title_en, icon_name, short_description, hero_description, benefits, process_steps, faqs, body, display_order, is_published")
+      .select("id, slug, title_ar, title_en, icon_name, short_description, hero_description, benefits, process_steps, faqs, body, display_order, is_published, meta_title, meta_description, keywords, og_image")
       .eq("slug", data.slug)
       .eq("is_published", true)
       .maybeSingle();
@@ -80,7 +89,7 @@ export const getCity = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: city, error } = await supabaseAdmin
       .from("cities")
-      .select("id, slug, name_ar, name_en, hero_title, hero_description, compliance_info, faqs, image_url, body, is_published")
+      .select("id, slug, name_ar, name_en, hero_title, hero_description, compliance_info, faqs, image_url, body, is_published, meta_title, meta_description, keywords, og_image")
       .eq("slug", data.slug)
       .eq("is_published", true)
       .maybeSingle();
