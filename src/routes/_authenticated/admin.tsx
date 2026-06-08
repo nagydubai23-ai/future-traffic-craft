@@ -44,6 +44,7 @@ import { SeoOverviewPanel } from "@/components/admin/SeoOverviewPanel";
 import { RedirectsPanel } from "@/components/admin/RedirectsPanel";
 import { GlobalSeoPanel } from "@/components/admin/GlobalSeoPanel";
 import { ImagesPanel } from "@/components/admin/ImagesPanel";
+import { MarkdownContent } from "@/components/MarkdownContent";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -815,6 +816,14 @@ function BlogPanel() {
           <Field label="Title (EN)"><Input dir="ltr" value={form.title_en} maxLength={200} onChange={(e) => setForm({ ...form, title_en: e.target.value })} /></Field>
           <Field label="رابط صورة الغلاف"><Input dir="ltr" placeholder="https://..." value={form.image_url} maxLength={500} onChange={(e) => setForm({ ...form, image_url: e.target.value })} /></Field>
           <Field label="المحتوى"><RichTextEditor value={form.body_ar} onChange={(v) => setForm({ ...form, body_ar: v })} minHeight={200} /></Field>
+          {form.body_ar && (
+            <div>
+              <p className="text-xs font-bold text-[var(--color-primary)] mb-2">معاينة Markdown</p>
+              <div className="rounded-xl border border-[oklch(0.929_0.013_255.508)] bg-white p-4 max-h-[400px] overflow-auto">
+                <MarkdownContent content={form.body_ar} dir="rtl" />
+              </div>
+            </div>
+          )}
           <button type="submit" disabled={add.isPending} className="w-full rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-bold text-[var(--color-primary)] disabled:opacity-60">
             {add.isPending ? "..." : "نشر المقال"}
           </button>
