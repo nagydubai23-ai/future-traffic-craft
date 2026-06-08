@@ -48,6 +48,8 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   const { open } = useQuote();
+  const { whatsapp } = useContactSettings();
+  const WHATSAPP_HREF = waHref(whatsapp, WHATSAPP_MESSAGE);
   return (
     <main dir="rtl" className="bg-background">
       {/* HERO */}
