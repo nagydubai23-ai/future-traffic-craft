@@ -5,7 +5,7 @@ import { listBlogPosts, type BlogPostRow } from "@/lib/blog.functions";
 import { transformImage } from "@/lib/image-url";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   loader: () => listBlogPosts(),
   head: () => ({
     meta: [
