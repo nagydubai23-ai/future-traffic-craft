@@ -16,36 +16,69 @@ export type Database = {
     Tables: {
       blog_posts: {
         Row: {
+          author: string | null
           body_ar: string | null
           body_en: string | null
+          canonical_url: string | null
+          category: string | null
           created_at: string
+          excerpt: string | null
+          faqs: Json | null
           id: string
           image_url: string | null
           is_published: boolean
+          keywords: string | null
+          meta_description: string | null
+          meta_title: string | null
+          og_image: string | null
+          published_at: string | null
+          reading_minutes: number | null
           slug: string
           title_ar: string
           title_en: string | null
           updated_at: string
         }
         Insert: {
+          author?: string | null
           body_ar?: string | null
           body_en?: string | null
+          canonical_url?: string | null
+          category?: string | null
           created_at?: string
+          excerpt?: string | null
+          faqs?: Json | null
           id?: string
           image_url?: string | null
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
+          published_at?: string | null
+          reading_minutes?: number | null
           slug: string
           title_ar: string
           title_en?: string | null
           updated_at?: string
         }
         Update: {
+          author?: string | null
           body_ar?: string | null
           body_en?: string | null
+          canonical_url?: string | null
+          category?: string | null
           created_at?: string
+          excerpt?: string | null
+          faqs?: Json | null
           id?: string
           image_url?: string | null
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
+          published_at?: string | null
+          reading_minutes?: number | null
           slug?: string
           title_ar?: string
           title_en?: string | null
@@ -65,8 +98,12 @@ export type Database = {
           id: string
           image_url: string | null
           is_published: boolean
+          keywords: string | null
+          meta_description: string | null
+          meta_title: string | null
           name_ar: string
           name_en: string | null
+          og_image: string | null
           seo_content_ar: string | null
           seo_content_en: string | null
           slug: string
@@ -83,8 +120,12 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name_ar: string
           name_en?: string | null
+          og_image?: string | null
           seo_content_ar?: string | null
           seo_content_en?: string | null
           slug: string
@@ -101,8 +142,12 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
           name_ar?: string
           name_en?: string | null
+          og_image?: string | null
           seo_content_ar?: string | null
           seo_content_en?: string | null
           slug?: string
@@ -329,6 +374,10 @@ export type Database = {
           icon_name: string | null
           id: string
           is_published: boolean
+          keywords: string | null
+          meta_description: string | null
+          meta_title: string | null
+          og_image: string | null
           process_steps: Json
           short_description: string | null
           slug: string
@@ -351,6 +400,10 @@ export type Database = {
           icon_name?: string | null
           id?: string
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
           process_steps?: Json
           short_description?: string | null
           slug: string
@@ -373,6 +426,10 @@ export type Database = {
           icon_name?: string | null
           id?: string
           is_published?: boolean
+          keywords?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          og_image?: string | null
           process_steps?: Json
           short_description?: string | null
           slug?: string

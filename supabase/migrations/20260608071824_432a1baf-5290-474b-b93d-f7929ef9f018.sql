@@ -1,0 +1,27 @@
+-- blog_posts SEO
+ALTER TABLE public.blog_posts
+  ADD COLUMN IF NOT EXISTS meta_title TEXT,
+  ADD COLUMN IF NOT EXISTS meta_description TEXT,
+  ADD COLUMN IF NOT EXISTS keywords TEXT,
+  ADD COLUMN IF NOT EXISTS og_image TEXT,
+  ADD COLUMN IF NOT EXISTS canonical_url TEXT,
+  ADD COLUMN IF NOT EXISTS category TEXT,
+  ADD COLUMN IF NOT EXISTS author TEXT,
+  ADD COLUMN IF NOT EXISTS excerpt TEXT,
+  ADD COLUMN IF NOT EXISTS reading_minutes INTEGER,
+  ADD COLUMN IF NOT EXISTS faqs JSONB DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS published_at TIMESTAMPTZ;
+
+-- cities SEO
+ALTER TABLE public.cities
+  ADD COLUMN IF NOT EXISTS meta_title TEXT,
+  ADD COLUMN IF NOT EXISTS meta_description TEXT,
+  ADD COLUMN IF NOT EXISTS keywords TEXT,
+  ADD COLUMN IF NOT EXISTS og_image TEXT;
+
+-- services SEO
+ALTER TABLE public.services
+  ADD COLUMN IF NOT EXISTS meta_title TEXT,
+  ADD COLUMN IF NOT EXISTS meta_description TEXT,
+  ADD COLUMN IF NOT EXISTS keywords TEXT,
+  ADD COLUMN IF NOT EXISTS og_image TEXT;
