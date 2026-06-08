@@ -21,6 +21,7 @@ export type Database = {
           body_en: string | null
           canonical_url: string | null
           category: string | null
+          changefreq: string | null
           created_at: string
           excerpt: string | null
           faqs: Json | null
@@ -30,9 +31,16 @@ export type Database = {
           keywords: string | null
           meta_description: string | null
           meta_title: string | null
+          nofollow: boolean
+          noindex: boolean
+          og_description: string | null
           og_image: string | null
+          og_title: string | null
+          priority: number | null
           published_at: string | null
           reading_minutes: number | null
+          schema_json: Json | null
+          schema_type: string | null
           slug: string
           title_ar: string
           title_en: string | null
@@ -44,6 +52,7 @@ export type Database = {
           body_en?: string | null
           canonical_url?: string | null
           category?: string | null
+          changefreq?: string | null
           created_at?: string
           excerpt?: string | null
           faqs?: Json | null
@@ -53,9 +62,16 @@ export type Database = {
           keywords?: string | null
           meta_description?: string | null
           meta_title?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
           published_at?: string | null
           reading_minutes?: number | null
+          schema_json?: Json | null
+          schema_type?: string | null
           slug: string
           title_ar: string
           title_en?: string | null
@@ -67,6 +83,7 @@ export type Database = {
           body_en?: string | null
           canonical_url?: string | null
           category?: string | null
+          changefreq?: string | null
           created_at?: string
           excerpt?: string | null
           faqs?: Json | null
@@ -76,9 +93,16 @@ export type Database = {
           keywords?: string | null
           meta_description?: string | null
           meta_title?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
           published_at?: string | null
           reading_minutes?: number | null
+          schema_json?: Json | null
+          schema_type?: string | null
           slug?: string
           title_ar?: string
           title_en?: string | null
@@ -89,6 +113,8 @@ export type Database = {
       cities: {
         Row: {
           body: string | null
+          canonical_url: string | null
+          changefreq: string | null
           compliance_info: string | null
           created_at: string
           display_order: number
@@ -103,7 +129,14 @@ export type Database = {
           meta_title: string | null
           name_ar: string
           name_en: string | null
+          nofollow: boolean
+          noindex: boolean
+          og_description: string | null
           og_image: string | null
+          og_title: string | null
+          priority: number | null
+          schema_json: Json | null
+          schema_type: string | null
           seo_content_ar: string | null
           seo_content_en: string | null
           slug: string
@@ -111,6 +144,8 @@ export type Database = {
         }
         Insert: {
           body?: string | null
+          canonical_url?: string | null
+          changefreq?: string | null
           compliance_info?: string | null
           created_at?: string
           display_order?: number
@@ -125,7 +160,14 @@ export type Database = {
           meta_title?: string | null
           name_ar: string
           name_en?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
+          schema_json?: Json | null
+          schema_type?: string | null
           seo_content_ar?: string | null
           seo_content_en?: string | null
           slug: string
@@ -133,6 +175,8 @@ export type Database = {
         }
         Update: {
           body?: string | null
+          canonical_url?: string | null
+          changefreq?: string | null
           compliance_info?: string | null
           created_at?: string
           display_order?: number
@@ -147,7 +191,14 @@ export type Database = {
           meta_title?: string | null
           name_ar?: string
           name_en?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
+          schema_json?: Json | null
+          schema_type?: string | null
           seo_content_ar?: string | null
           seo_content_en?: string | null
           slug?: string
@@ -358,10 +409,45 @@ export type Database = {
           },
         ]
       }
+      redirects: {
+        Row: {
+          created_at: string
+          destination: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          source: string
+          status_code: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          source: string
+          status_code?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          source?: string
+          status_code?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           benefits: Json
           body: string | null
+          canonical_url: string | null
+          changefreq: string | null
           content_ar: string | null
           content_en: string | null
           created_at: string
@@ -377,8 +463,15 @@ export type Database = {
           keywords: string | null
           meta_description: string | null
           meta_title: string | null
+          nofollow: boolean
+          noindex: boolean
+          og_description: string | null
           og_image: string | null
+          og_title: string | null
+          priority: number | null
           process_steps: Json
+          schema_json: Json | null
+          schema_type: string | null
           short_description: string | null
           slug: string
           title_ar: string
@@ -388,6 +481,8 @@ export type Database = {
         Insert: {
           benefits?: Json
           body?: string | null
+          canonical_url?: string | null
+          changefreq?: string | null
           content_ar?: string | null
           content_en?: string | null
           created_at?: string
@@ -403,8 +498,15 @@ export type Database = {
           keywords?: string | null
           meta_description?: string | null
           meta_title?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
           process_steps?: Json
+          schema_json?: Json | null
+          schema_type?: string | null
           short_description?: string | null
           slug: string
           title_ar: string
@@ -414,6 +516,8 @@ export type Database = {
         Update: {
           benefits?: Json
           body?: string | null
+          canonical_url?: string | null
+          changefreq?: string | null
           content_ar?: string | null
           content_en?: string | null
           created_at?: string
@@ -429,8 +533,15 @@ export type Database = {
           keywords?: string | null
           meta_description?: string | null
           meta_title?: string | null
+          nofollow?: boolean
+          noindex?: boolean
+          og_description?: string | null
           og_image?: string | null
+          og_title?: string | null
+          priority?: number | null
           process_steps?: Json
+          schema_json?: Json | null
+          schema_type?: string | null
           short_description?: string | null
           slug?: string
           title_ar?: string
