@@ -12,4 +12,8 @@
 // `node .output/server/index.mjs`.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig({});
+export default defineConfig({
+  // Force-enable Nitro outside the Lovable sandbox and target a standalone
+  // Node server bundle at .output/server/index.mjs.
+  nitro: { preset: "node-server" },
+});
