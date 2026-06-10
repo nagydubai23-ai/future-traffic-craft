@@ -42,6 +42,9 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
+# wget is required by the HEALTHCHECK below; node:20-alpine ships without it.
+RUN apk add --no-cache wget
+
 # Nitro's node-server preset writes a self-contained bundle to .output/
 COPY --from=builder /app/.output ./.output
 
