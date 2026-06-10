@@ -1,101 +1,64 @@
+## التشخيص
 
-## السبب الجذري
+السيرفر بُني وانطلق بنجاح (`Listening on http://localhost:3000`) — Nitro يعمل والـ Dockerfile صحيح. الفشل سببه **متغيرات بيئة ناقصة في Coolify فقط**، لا في الكود:
 
-بعد مراجعة الكود ومنطق `@lovable.dev/vite-tanstack-config` v2 + Nitro 3:
-
-1. **Nitro لا يعمل أصلاً داخل Docker.** في `node_modules/@lovable.dev/vite-tanstack-config/dist/index.js` السطر 348:
-   ```
-   shouldRunNitro = options.nitro !== false && command === "build" && (explicitNitro || isSandbox)
-   ```
-   خارج بيئة Lovable sandbox وبدون `nitro: true` صريحة، **يُتخطى Nitro كلياً**. الـ `vite.config.docker.ts` الحالي = `defineConfig({})` بدون أي `nitro`، لذا متغير البيئة `NITRO_PRESET=node_server` في Dockerfile لا يُستخدم، ولا يُبنى سيرفر SSR على الإطلاق.
-
-2. **مسار الـ Dockerfile خاطئ.** preset `node-server` يُخرج إلى `.output/server/index.mjs` (السطر 1287 في `nitro/dist/_presets.mjs` + `commands.preview = "node ./server/index.mjs"`)، بينما الـ Dockerfile ينسخ `dist/` ويشغّل `dist/server/server.js` — مسار غير موجود.
-
-3. **متغيرات `VITE_*` غير ممرّرة وقت البناء.** Vite يدمج `VITE_SUPABASE_URL`/`VITE_SUPABASE_PUBLISHABLE_KEY` في bundle العميل وقت `vite build`. الـ Dockerfile لا يحتوي على `ARG`، فالقيم تكون فارغة في الـ image، والعميل يرمي `Missing Supabase environment variable(s)` فيظهر `ErrorComponent`.
-
-4. **متغيرات Runtime مفقودة.** `src/start.ts` يشغّل `redirectsMiddleware` على كل طلب، ويستدعي `getRedirect` الذي يستورد `supabaseAdmin` من `client.server.ts`. إذا كانت `SUPABASE_URL` أو `SUPABASE_SERVICE_ROLE_KEY` غير مضبوطة، يُرمى استثناء (يُلتقط داخل try/catch هناك، لكن `src/routes/sitemap[.]xml.ts` و `llms.txt.ts` و serverFns الأخرى ترمي بدون التقاط).
-
-## الإصلاحات
-
-### 1) `vite.config.docker.ts` — تفعيل Nitro بصراحة
-
-```ts
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-
-export default defineConfig({
-  nitro: { preset: "node-server" },
-});
+```
+[Supabase] Missing Supabase environment variable(s): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+[Supabase] Missing Supabase environment variable(s): SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
 ```
 
-هذا يُجبر Nitro على التشغيل ويختار preset Node الذاتي الاستضافة. لا حاجة لـ `NITRO_PRESET` env بعد الآن.
+كل طلب SSR يستدعي `redirectsMiddleware` → `supabaseAdmin` → يرمي لأن `SUPABASE_URL` و `SUPABASE_SERVICE_ROLE_KEY` غير موجودة. الـ healthcheck يفشل لأن الصفحة الرئيسية ترجع 500.
 
-### 2) `Dockerfile` — تصحيح المسارات + تمرير VITE_* وقت البناء
+بالإضافة، Coolify يحذّر من `NODE_ENV=production` كـ Build Variable لأنه يمنع تثبيت devDependencies (Vite/TypeScript).
 
-```dockerfile
-# syntax=docker/dockerfile:1.7
+## الإصلاحات (إعدادات Coolify فقط — لا تعديل كود)
 
-FROM oven/bun:1-alpine AS builder
-WORKDIR /app
+### 1) إزالة `NODE_ENV=production` من Build Variables
 
-# Build-time args (Vite inlines these into client bundle)
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_PUBLISHABLE_KEY
-ARG VITE_SUPABASE_PROJECT_ID=self-hosted
-ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
-ENV VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY
-ENV VITE_SUPABASE_PROJECT_ID=$VITE_SUPABASE_PROJECT_ID
+في Coolify → Environment Variables:
+- ابحث عن `NODE_ENV` وأزل علامة **"Available at Buildtime"** (أو احذف المتغير كلياً — الـ Dockerfile يضبط `NODE_ENV=production` في طبقة runtime بنفسه عبر `ENV NODE_ENV=production`).
 
-COPY package.json bun.lock* bunfig.toml ./
-RUN bun install --frozen-lockfile
-COPY . .
+### 2) إضافة Build Variables (مع علامة "Build Variable" / "Available at Buildtime")
 
-ENV NODE_ENV=production
-RUN bun run vite build -c vite.config.docker.ts
+هذه يدمجها Vite في bundle العميل وقت البناء:
 
-# ---- runtime ----
-FROM node:20-alpine AS runtime
-WORKDIR /app
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOST=0.0.0.0
+| الاسم | القيمة |
+|---|---|
+| `VITE_SUPABASE_URL` | `https://supabase.art-traffics.com` (أو رابط Supabase الذاتي عندك) |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | anon key من Supabase |
+| `VITE_SUPABASE_PROJECT_ID` | `self-hosted` |
 
-# Nitro node-server preset writes a self-contained bundle to .output/
-COPY --from=builder /app/.output ./.output
+### 3) إضافة Runtime Variables (بدون علامة Build)
 
-EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1
+هذه يقرأها سيرفر Node وقت التشغيل:
 
-CMD ["node", ".output/server/index.mjs"]
-```
+| الاسم | القيمة |
+|---|---|
+| `SUPABASE_URL` | نفس رابط Supabase |
+| `SUPABASE_PUBLISHABLE_KEY` | نفس anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | service role key (server-only) |
+| `PORT` | `3000` |
+| `HOST` | `0.0.0.0` |
 
-### 3) Coolify — متغيرات بيئة لازمة
+> ملاحظة: `SUPABASE_SERVICE_ROLE_KEY` لا تضع لها بادئة `VITE_` أبداً ولا تجعلها Build Variable.
 
-في إعدادات التطبيق على Coolify:
+### 4) إصلاح الـ Healthcheck (اختياري لكن مهم)
 
-**Build Variables** (لازم تُعلَّم "Build Variable" حتى تُمرَّر كـ `--build-arg`):
-- `VITE_SUPABASE_URL` = `https://supabase.art-traffics.com`
-- `VITE_SUPABASE_PUBLISHABLE_KEY` = (anon key الخاص بـ Supabase الذاتي)
-- `VITE_SUPABASE_PROJECT_ID` = `self-hosted`
+تحذير Coolify: `wget` غير موجود في `node:20-alpine`. خياران:
 
-**Runtime Variables**:
-- `SUPABASE_URL` = `https://supabase.art-traffics.com`
-- `SUPABASE_PUBLISHABLE_KEY` = (نفس anon key)
-- `SUPABASE_SERVICE_ROLE_KEY` = (service role key — server only)
-- `NODE_ENV=production` ، `PORT=3000` ، `HOST=0.0.0.0`
+- **أ) عطّل healthcheck في Coolify UI** (Application → Healthcheck → Disabled).
+- **ب) أو في build mode سأعدّل `Dockerfile` لإضافة `RUN apk add --no-cache wget`** في طبقة runtime.
 
-### 4) (اختياري لكنه يكشف الأخطاء الحقيقية) إعادة بناء بعد الإصلاح
+### 5) إعادة النشر
 
-بعد التطبيق، إذا ظلّ خطأ SSR ظاهراً، اطلب من Coolify عرض runtime logs (`docker logs`) — الآن `node-server` preset يطبع stack traces مباشرة على stdout، وستظهر السبب الفعلي (غالباً سيكون متغير bيئة محدد ناقص).
+بعد إضافة المتغيرات: Redeploy. توقّع رؤية الصفحة الرئيسية تعمل، وإذا بقي خطأ ستظهر stack trace حقيقية في `docker logs`.
 
 ## ما لن يتغير
 
-- `src/server.ts` (الـ Cloudflare Workers fetch wrapper) يبقى للنشر على Lovable — `vite.config.docker.ts` لا يستخدمه أصلاً (لا يوجد `tanstackStart.server.entry` فيه)، فيستخدم Nitro الـ entry الافتراضي المناسب لـ Node.
-- لا تعديل على الكود (routes, components, supabase clients).
+- لا تعديل على الكود إلا إذا اخترت الخيار (4-ب) لإضافة `wget`.
 - لا تعديل على schema قاعدة البيانات.
 
-## ملخّص ما عليك فعله
+## ما عليك تأكيده قبل التنفيذ
 
-1. تطبيق التعديلات على ملفين فقط: `vite.config.docker.ts` و `Dockerfile`.
-2. في Coolify: إضافة المتغيرات أعلاه (مع وضع علامة Build Variable على الـ `VITE_*`).
-3. Redeploy.
+1. هل تريدني (في build mode) أن أعدّل `Dockerfile` لإضافة `wget` لحل تحذير healthcheck؟ أم ستعطّله من Coolify UI؟
+2. هل رابط Supabase الذاتي عندك هو `https://supabase.art-traffics.com` أم رابط آخر؟
