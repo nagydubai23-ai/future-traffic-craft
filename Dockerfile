@@ -42,6 +42,9 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
+# تثبيت curl علشان فحص الـ Healthcheck ينجح بدون مشاكل الشبكة
+RUN apk add --no-cache curl
+
 # Nitro's node-server preset writes a self-contained bundle to .output/
 COPY --from=builder /app/.output ./.output
 
