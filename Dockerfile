@@ -50,8 +50,9 @@ COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
 
-# Healthcheck — Coolify also runs its own, this is a fallback
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1 || exit 1
+# Healthcheck — Coolify also runs its own, this is a fallback.
+# The longer start period gives the Nitro server enough time to boot.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD wget --spider --no-verbose http://127.0.0.1:3000/ || exit 1
 
 CMD ["node", "/app/.output/server/index.mjs"]
