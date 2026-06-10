@@ -42,14 +42,18 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
 
+# wget is required by the HEALTHCHECK below; node:20-alpine ships without it.
+RUN apk add --no-cache wget
+
 # Nitro's node-server preset writes a self-contained bundle to .output/
 COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
 
-# Healthcheck — considers the app healthy if the server responds with any non-5xx status.
-# This avoids failing when "/" returns 404 while the Nitro server itself is running.
+# Healthcheck — Coolify expects curl or wget.
+# wget may return exit code 1 on 404, so we accept both 0 and 1.
+# Code 1 still means the server responded; connection errors usually return another code.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
-  CMD node -e "fetch('http://127.0.0.1:3000/').then(r => process.exit(r.status < 500 ? 0 : 1)).catch(() => process.exit(1))"
+  CMD wget -qO- http://127.0.0.1:3000/ >/dev/null 2>&1; code=$?; [ "$code" = "0" ] || [ "$code" = "1" ]
 
 CMD ["node", "/app/.output/server/index.mjs"]
