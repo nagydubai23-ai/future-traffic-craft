@@ -35,7 +35,7 @@ ENV PORT=3000
 ENV HOST=0.0.0.0
 
 # Nitro's node_server preset writes a self-contained bundle to .output/
-COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/dist ./dist
 
 EXPOSE 3000
 
