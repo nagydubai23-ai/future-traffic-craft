@@ -1,64 +1,43 @@
-## التشخيص
+من ملف Supabase self-hosted بتاعك، استخرجت القيم الصحيحة. ضيفهم في **Coolify → Application (مش Supabase) → Environment Variables** بالظبط كده:
 
-السيرفر بُني وانطلق بنجاح (`Listening on http://localhost:3000`) — Nitro يعمل والـ Dockerfile صحيح. الفشل سببه **متغيرات بيئة ناقصة في Coolify فقط**، لا في الكود:
-
-```
-[Supabase] Missing Supabase environment variable(s): SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
-[Supabase] Missing Supabase environment variable(s): SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY
-```
-
-كل طلب SSR يستدعي `redirectsMiddleware` → `supabaseAdmin` → يرمي لأن `SUPABASE_URL` و `SUPABASE_SERVICE_ROLE_KEY` غير موجودة. الـ healthcheck يفشل لأن الصفحة الرئيسية ترجع 500.
-
-بالإضافة، Coolify يحذّر من `NODE_ENV=production` كـ Build Variable لأنه يمنع تثبيت devDependencies (Vite/TypeScript).
-
-## الإصلاحات (إعدادات Coolify فقط — لا تعديل كود)
-
-### 1) إزالة `NODE_ENV=production` من Build Variables
-
-في Coolify → Environment Variables:
-- ابحث عن `NODE_ENV` وأزل علامة **"Available at Buildtime"** (أو احذف المتغير كلياً — الـ Dockerfile يضبط `NODE_ENV=production` في طبقة runtime بنفسه عبر `ENV NODE_ENV=production`).
-
-### 2) إضافة Build Variables (مع علامة "Build Variable" / "Available at Buildtime")
-
-هذه يدمجها Vite في bundle العميل وقت البناء:
+## 1) Runtime Variables (بدون علامة "Build Variable")
 
 | الاسم | القيمة |
 |---|---|
-| `VITE_SUPABASE_URL` | `https://supabase.art-traffics.com` (أو رابط Supabase الذاتي عندك) |
-| `VITE_SUPABASE_PUBLISHABLE_KEY` | anon key من Supabase |
-| `VITE_SUPABASE_PROJECT_ID` | `self-hosted` |
+| `SUPABASE_URL` | `https://supabase.art-traffics.com` |
+| `SUPABASE_PUBLISHABLE_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzAwMDAwMDAwLCJleHAiOjIwMDAwMDAwMDB9.dfPPchPVRhLR4QlteMcQFIZqH7W_ojc7RrrQHvvyscQ` |
+| `SUPABASE_SERVICE_ROLE_KEY` | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaXNzIjoic3VwYWJhc2UiLCJpYXQiOjE3MDAwMDAwMDAsImV4cCI6MjAwMDAwMDAwMH0.ZPUqeE6Q30xQYM4tnq7VgbP0Y8BdWWcCYh4qwf7Pyfg` |
 
-### 3) إضافة Runtime Variables (بدون علامة Build)
-
-هذه يقرأها سيرفر Node وقت التشغيل:
+## 2) Build Variables (علّم "Available at Buildtime")
 
 | الاسم | القيمة |
 |---|---|
-| `SUPABASE_URL` | نفس رابط Supabase |
-| `SUPABASE_PUBLISHABLE_KEY` | نفس anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | service role key (server-only) |
-| `PORT` | `3000` |
-| `HOST` | `0.0.0.0` |
+| `VITE_SUPABASE_URL` | `https://supabase.art-traffics.com` |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | نفس قيمة `SUPABASE_PUBLISHABLE_KEY` فوق (الـ anon key) |
 
-> ملاحظة: `SUPABASE_SERVICE_ROLE_KEY` لا تضع لها بادئة `VITE_` أبداً ولا تجعلها Build Variable.
+## 3) Redeploy
 
-### 4) إصلاح الـ Healthcheck (اختياري لكن مهم)
+بعد إضافة المتغيرات → Redeploy. السيرفر هيلاقي القيم وهيشتغل.
 
-تحذير Coolify: `wget` غير موجود في `node:20-alpine`. خياران:
+---
 
-- **أ) عطّل healthcheck في Coolify UI** (Application → Healthcheck → Disabled).
-- **ب) أو في build mode سأعدّل `Dockerfile` لإضافة `RUN apk add --no-cache wget`** في طبقة runtime.
+## ⚠️ تحذير أمني مهم جداً
 
-### 5) إعادة النشر
+أنت لسه نشرت في الشات قيم سرية (service role key + كل كلمات السر). **غير كل القيم دي فوراً** في Supabase بتاعك على Coolify:
+- `SERVICE_PASSWORD_JWT` (الأخطر — لو اتسرب أي حد يقدر يعمل توكنز لأي مستخدم)
+- `SERVICE_PASSWORD_POSTGRES`, `SERVICE_PASSWORD_ADMIN`, و باقي الباسوردات
+- الـ JWT keys هتتولد جديدة تلقائياً لما تغير `JWT_SECRET`
 
-بعد إضافة المتغيرات: Redeploy. توقّع رؤية الصفحة الرئيسية تعمل، وإذا بقي خطأ ستظهر stack trace حقيقية في `docker logs`.
+## ملاحظة على إعداد Supabase نفسه
 
-## ما لن يتغير
+شايف عندك:
+```
+GOTRUE_SITE_URL=https://supabase.art-traffics.com:8000
+API_EXTERNAL_URL=https://supabase.art-traffics.com:8000
+```
 
-- لا تعديل على الكود إلا إذا اخترت الخيار (4-ب) لإضافة `wget`.
-- لا تعديل على schema قاعدة البيانات.
+الـ `:8000` غريب لو عندك Cloudflare/Traefik على 443. لو موقعك الفعلي للأبليكيشن مثلاً `https://art-traffics.com`، لازم تعدّل:
+- `GOTRUE_SITE_URL` → دومين موقعك الأساسي (مش Supabase)
+- `ADDITIONAL_REDIRECT_URLS` → ضيف فيه دومين موقعك
 
-## ما عليك تأكيده قبل التنفيذ
-
-1. هل تريدني (في build mode) أن أعدّل `Dockerfile` لإضافة `wget` لحل تحذير healthcheck؟ أم ستعطّله من Coolify UI؟
-2. هل رابط Supabase الذاتي عندك هو `https://supabase.art-traffics.com` أم رابط آخر؟
+لكن دي مشكلة منفصلة عن الـ deployment الحالي — أول حاجة خلي الأبليكيشن يشتغل بالخطوات فوق، وبعدين نتعامل مع auth redirects.
